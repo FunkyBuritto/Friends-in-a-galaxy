@@ -15,8 +15,7 @@ public class OSCHandler : MonoBehaviour
 
             instance = GetComponent<OSC>();
         }
-        else
-            Destroy(gameObject);
+        else Destroy(gameObject);
     }
 
     /// <summary>
@@ -40,5 +39,15 @@ public class OSCHandler : MonoBehaviour
     public static void AddGlobalHook(OscMessageHandler handler)
     {
         instance.SetAllMessageHandler(handler);
+    }
+
+    /// <summary>
+    /// Add a hook into the OSC server that trigger for every user.
+    /// </summary>
+    /// <param name="address">The OSC address /Device/{type}</param>
+    /// <param name="handler">The callback for when a message is matched</param>
+    public static void AddGlobalSpecificHook(string address, OscMessageHandler handler)
+    {
+        instance.SetAddressHandler(address, handler);
     }
 }
