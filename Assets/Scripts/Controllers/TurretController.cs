@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityOSC;
 
 public class TurretController : MonoBehaviour
 {
@@ -8,10 +9,12 @@ public class TurretController : MonoBehaviour
 
     public bool useKeyboard = false;
     public float rotationSpeed;
+    OSCUser user;
 
     // Start is called before the first frame update
     void Start()
     {
+        //user = OSCUser.GetGunner();
     }
 
     // Update is called once per frame
