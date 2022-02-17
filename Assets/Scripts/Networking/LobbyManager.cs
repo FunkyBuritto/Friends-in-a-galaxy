@@ -11,7 +11,7 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] public List<OSCUser> users = new List<OSCUser>();
 
     /// Events
-    public delegate void ConnectionEvent(string addr, int index);
+    public delegate void ConnectionEvent(OSCUser user, int index);
     public event ConnectionEvent OnConnection;
     public delegate void DisconnectEvent(int index);
     public event DisconnectEvent OnDisconnect;
@@ -25,8 +25,7 @@ public class LobbyManager : MonoBehaviour
 
             instance = this;
         }
-        else
-            Destroy(gameObject);
+        else Destroy(gameObject);
     }
 
     private void Start()
@@ -50,8 +49,8 @@ public class LobbyManager : MonoBehaviour
     /// </summary>
     private void OnConnect(string ip)
     {
-        OnConnection.Invoke(ip, users.Count);
         users.Add(new OSCUser(ip));
+        if (OnConnection != null) OnConnection.Invoke(users[users.Count - 1], users.Count - 1);
     }
 
     /// <summary>
@@ -78,7 +77,7 @@ public class LobbyManager : MonoBehaviour
     private IEnumerator Timeout(OSCUser user)
     {
         yield return new WaitForSeconds(2f);
-        OnDisconnect.Invoke(users.IndexOf(user));
+        if (OnDisconnect != null) OnDisconnect.Invoke(users.IndexOf(user));
         users.Remove(user); // Remove the user once they time out.
     }
 }

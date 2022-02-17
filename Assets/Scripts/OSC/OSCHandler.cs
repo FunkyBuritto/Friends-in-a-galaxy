@@ -15,8 +15,7 @@ public class OSCHandler : MonoBehaviour
 
             instance = GetComponent<OSC>();
         }
-        else
-            Destroy(gameObject);
+        else Destroy(gameObject);
     }
 
     /// <summary>
