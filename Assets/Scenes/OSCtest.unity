@@ -177,8 +177,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inPort: 7060
-  outIP: 192.168.1.7
-  outPort: 7040
+  outIP: 192.168.165.111
+  outPort: 7060
 --- !u!20 &143135149
 Camera:
   m_ObjectHideFlags: 0

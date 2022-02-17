@@ -21,8 +21,6 @@ namespace UnityOSC
         private int remotePort;
         private int localPort;
 
-
-
         public UDPPacketIO(string hostIP, int remotePort, int localPort)
         {
             RemoteHostName = hostIP;
@@ -30,7 +28,6 @@ namespace UnityOSC
             LocalPort = localPort;
             socketsOpen = false;
         }
-
 
         ~UDPPacketIO()
         {
@@ -40,12 +37,10 @@ namespace UnityOSC
                 Debug.Log("closing udpclient listener on port " + localPort);
                 Close();
             }
-
         }
 
         /// <summary>
         /// Open a UDP socket and create a UDP sender.
-        /// 
         /// </summary>
         /// <returns>True on success, false on failure.</returns>
         public bool Open()
@@ -57,7 +52,6 @@ namespace UnityOSC
 
                 IPEndPoint listenerIp = new IPEndPoint(IPAddress.Any, localPort);
                 Receiver = new UdpClient(listenerIp);
-
 
                 socketsOpen = true;
 
@@ -87,7 +81,6 @@ namespace UnityOSC
             }
             Receiver = null;
             socketsOpen = false;
-
         }
 
         public void OnDisable()
@@ -117,7 +110,6 @@ namespace UnityOSC
                 return;
 
             Sender.Send(packet, length, remoteHostName, remotePort);
-            //Debug.Log("osc message sent to "+remoteHostName+" port "+remotePort+" len="+length);
         }
 
         public struct UDPPacket
@@ -152,14 +144,8 @@ namespace UnityOSC
         /// </summary>
         public string RemoteHostName
         {
-            get
-            {
-                return remoteHostName;
-            }
-            set
-            {
-                remoteHostName = value;
-            }
+            get => remoteHostName;
+            set => remoteHostName = value;
         }
 
         /// <summary>
@@ -167,14 +153,8 @@ namespace UnityOSC
         /// </summary>
         public int RemotePort
         {
-            get
-            {
-                return remotePort;
-            }
-            set
-            {
-                remotePort = value;
-            }
+            get => remotePort;
+            set => remotePort = value;
         }
 
         /// <summary>
@@ -182,19 +162,11 @@ namespace UnityOSC
         /// </summary>
         public int LocalPort
         {
-            get
-            {
-                return localPort;
-            }
-            set
-            {
-                localPort = value;
-            }
+            get => localPort;
+            set => localPort = value;
         }
     }
 
-    //namespace MakingThings
-    //{
     /// <summary>
     /// The OscMessage class is a data structure that represents
     /// an OSC address and an arbitrary number of values to be sent to that address.
@@ -301,7 +273,6 @@ namespace UnityOSC
     /// </summary>
     public class OSC : MonoBehaviour
     {
-
         public int inPort = 6969;
         public string outIP = "127.0.0.1";
         public int outPort = 6161;
@@ -321,27 +292,15 @@ namespace UnityOSC
 
         bool paused = false;
 
-
-    #if UNITY_EDITOR
-        
-        private void HandleOnPlayModeChanged(UnityEditor.PlayModeStateChange state) //FIX FOR UNITY POST 2017
+        #if UNITY_EDITOR
+        private void HandleOnPlayModeChanged(UnityEditor.PlayModeStateChange state)
         {
-            // This method is run whenever the playmode state is changed.
-            
-            
-                paused = UnityEditor.EditorApplication.isPaused;
-                //print ("editor paused "+paused);
-                // do stuff when the editor is paused.
-            
+            paused = UnityEditor.EditorApplication.isPaused;
         }
-    #endif
-
-
+        #endif
 
         void Awake()
         {
-            //print("Opening OSC listener on port " + inPort);
-
             OscPacketIO = new UDPPacketIO(outIP, outPort, inPort);
             AddressTable = new Hashtable();
 
@@ -349,17 +308,14 @@ namespace UnityOSC
 
             buffer = new byte[1000];
 
-
             ReadThread = new Thread(Read);
             ReaderRunning = true;
             ReadThread.IsBackground = true;
             ReadThread.Start();
 
-    #if UNITY_EDITOR
-            //UnityEditor.EditorApplication.playmodeStateChanged = HandleOnPlayModeChanged;
-            UnityEditor.EditorApplication.playModeStateChanged += HandleOnPlayModeChanged;  //FIX FOR UNITY POST 2017
-    #endif
-
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.playModeStateChanged += HandleOnPlayModeChanged;
+        #endif
         }
 
         void OnDestroy()
@@ -375,7 +331,6 @@ namespace UnityOSC
         /// <param name="key">Address string to be matched</param>   
         /// <param name="ah">The method to call back on.</param>   
         public void SetAddressHandler(string key, OscMessageHandler ah)
-
         {
             ArrayList al = (ArrayList)Hashtable.Synchronized(AddressTable)[key];
             if (al == null)
@@ -384,18 +339,8 @@ namespace UnityOSC
                 al.Add(ah);
                 Hashtable.Synchronized(AddressTable).Add(key, al);
             }
-            else
-            {
-                al.Add(ah);
-            }
-            /*
-            OscMessageHandler h = (OscMessageHandler)Hashtable.Synchronized(AddressTable)[key];
-            if (h == null)  Hashtable.Synchronized(AddressTable).Add(key, ah);
-            else print ("there");
-            */
+            else al.Add(ah);
         }
-
-
 
         void OnApplicationPause(bool pauseStatus)
         {
@@ -405,19 +350,14 @@ namespace UnityOSC
     #endif
         }
 
-
         void Update()
         {
-
-
             if (messagesReceived.Count > 0)
             {
-                //Debug.Log("received " + messagesReceived.Count + " messages");
                 lock (ReadThreadLock)
                 {
                     foreach (OscMessage om in messagesReceived)
                     {
-
                         if (AllMessageHandler != null)
                             AllMessageHandler(om);
 
@@ -429,40 +369,22 @@ namespace UnityOSC
                                 h(om);
                             }
                         }
-
                     }
                     messagesReceived.Clear();
                 }
             }
-
-
-
-
         }
-
-
 
         /// <summary>
         /// Make sure the PacketExchange is closed.
         /// </summary>
         /// 
-        /*
-        ~OSC()
-        {           
-            Cancel();
-            //Debug.LogError("~Osc");
-        }
-        */
         public void Close()
         {
-            //Debug.Log("Osc Cancel start");
-
-
             if (ReaderRunning)
             {
                 ReaderRunning = false;
                 ReadThread.Abort();
-
             }
 
             if (OscPacketIO != null && OscPacketIO.IsOpen())
@@ -471,7 +393,6 @@ namespace UnityOSC
                 OscPacketIO = null;
                 print("Closed OSC listener");
             }
-
         }
 
 
@@ -486,15 +407,12 @@ namespace UnityOSC
             {
                 while (ReaderRunning)
                 {
-
-
                     UDPPacketIO.UDPPacket packet = OscPacketIO.ReceivePacket(buffer);
 
                     if (packet.length > 0)
                     {
                         lock (ReadThreadLock)
                         {
-
                             if (paused == false)
                             {
                                 ArrayList newMessages = OSC.PacketToOscMessages(buffer, packet);
@@ -502,27 +420,15 @@ namespace UnityOSC
                             }
 
                         }
-
-
                     }
-                    else
-                        Thread.Sleep(5);
+                    else Thread.Sleep(5);
                 }
             }
-
             catch (Exception e)
             {
                 Debug.Log("ThreadAbortException" + e);
             }
-            finally
-            {
-
-            }
-
         }
-
-
-
 
         /// <summary>
         /// Send an individual OSC message.  Internally takes the OscMessage object and 
@@ -532,7 +438,7 @@ namespace UnityOSC
         public void Send(OscMessage oscMessage)
         {
             byte[] packet = new byte[1000];
-            int length = OSC.OscMessageToPacket(oscMessage, packet, 1000);
+            int length = OscMessageToPacket(oscMessage, packet, 1000);
             OscPacketIO.SendPacket(packet, length);
         }
 
@@ -544,7 +450,7 @@ namespace UnityOSC
         public void Send(ArrayList oms)
         {
             byte[] packet = new byte[1000];
-            int length = OSC.OscMessagesToPacket(oms, packet, 1000);
+            int length = OscMessagesToPacket(oms, packet, 1000);
             OscPacketIO.SendPacket(packet, length);
         }
 
@@ -553,14 +459,7 @@ namespace UnityOSC
         /// The method needs to have the OscMessageHandler signature - i.e. void amh( OscMessage oscM )
         /// </summary>
         /// <param name="amh">The method to call back on.</param>   
-        public void SetAllMessageHandler(OscMessageHandler amh)
-        {
-            AllMessageHandler = amh;
-        }
-
-
-
-
+        public void SetAllMessageHandler(OscMessageHandler amh) => AllMessageHandler = amh;
 
         /// <summary>
         /// Creates an OscMessage from a string - extracts the address and determines each of the values. 
@@ -578,7 +477,6 @@ namespace UnityOSC
             while (sE.MoveNext())
             {
                 string s = (string)sE.Current;
-                // Console.WriteLine("  <" + s + ">");
                 if (s.StartsWith("\""))
                 {
                     StringBuilder quoted = new StringBuilder();
@@ -590,7 +488,6 @@ namespace UnityOSC
                     while (sE.MoveNext())
                     {
                         string a = (string)sE.Current;
-                        // Console.WriteLine("    q:<" + a + ">");
                         if (looped)
                             quoted.Append(" ");
                         if (a.EndsWith("\""))
@@ -616,7 +513,6 @@ namespace UnityOSC
                         try
                         {
                             int i = int.Parse(s);
-                            // Console.WriteLine("  i:" + i);
                             oM.values.Add(i);
                         }
                         catch
@@ -624,16 +520,13 @@ namespace UnityOSC
                             try
                             {
                                 float f = float.Parse(s);
-                                // Console.WriteLine("  f:" + f);
                                 oM.values.Add(f);
                             }
                             catch
                             {
-                                // Console.WriteLine("  s:" + s);
                                 oM.values.Add(s);
                             }
                         }
-
                     }
                 }
             }
@@ -716,7 +609,6 @@ namespace UnityOSC
         {
             int index = start;
             index = InsertString(oscM.address, packet, index, length);
-            //if (oscM.values.Count > 0)
             {
                 StringBuilder tag = new StringBuilder();
                 tag.Append(",");
@@ -725,9 +617,8 @@ namespace UnityOSC
 
                 foreach (object o in oscM.values)
                 {
-                    if (o is int)
+                    if (o is int i)
                     {
-                        int i = (int)o;
                         tag.Append("i");
                         packet[index++] = (byte)((i >> 24) & 0xFF);
                         packet[index++] = (byte)((i >> 16) & 0xFF);
@@ -736,9 +627,8 @@ namespace UnityOSC
                     }
                     else
                     {
-                        if (o is float)
+                        if (o is float f)
                         {
-                            float f = (float)o;
                             tag.Append("f");
                             byte[] buffer = new byte[4];
                             MemoryStream ms = new MemoryStream(buffer);
@@ -794,7 +684,6 @@ namespace UnityOSC
                         while (index < length)
                         {
                             int messageSize = (packet[index++] << 24) + (packet[index++] << 16) + (packet[index++] << 8) + packet[index++];
-                            /*int newIndex = */
                             ExtractMessages(messages, packet, index, length, address);
                             index += messageSize;
                         }
@@ -820,39 +709,35 @@ namespace UnityOSC
             int index = start + PadSize(oscM.address.Length + 1);
             string typeTag = ExtractString(packet, index, length);
             index += PadSize(typeTag.Length + 1);
-            //oscM.values.Add(typeTag);
             foreach (char c in typeTag)
             {
                 switch (c)
                 {
                     case ',':
                         break;
+
                     case 's':
-                        {
-                            string s = ExtractString(packet, index, length);
-                            index += PadSize(s.Length + 1);
-                            oscM.values.Add(s);
-                            break;
-                        }
+                        string s = ExtractString(packet, index, length);
+                        index += PadSize(s.Length + 1);
+                        oscM.values.Add(s);
+                        break;
+
                     case 'i':
-                        {
-                            int i = (packet[index++] << 24) + (packet[index++] << 16) + (packet[index++] << 8) + packet[index++];
-                            oscM.values.Add(i);
-                            break;
-                        }
+                        int i = (packet[index++] << 24) + (packet[index++] << 16) + (packet[index++] << 8) + packet[index++];
+                        oscM.values.Add(i);
+                        break;
+
                     case 'f':
-                        {
-                            byte[] buffer = new byte[4];
-                            buffer[3] = packet[index++];
-                            buffer[2] = packet[index++];
-                            buffer[1] = packet[index++];
-                            buffer[0] = packet[index++];
-                            MemoryStream ms = new MemoryStream(buffer);
-                            BinaryReader br = new BinaryReader(ms);
-                            float f = br.ReadSingle();
-                            oscM.values.Add(f);
-                            break;
-                        }
+                        byte[] buffer = new byte[4];
+                        buffer[3] = packet[index++];
+                        buffer[2] = packet[index++];
+                        buffer[1] = packet[index++];
+                        buffer[0] = packet[index++];
+                        MemoryStream ms = new MemoryStream(buffer);
+                        BinaryReader br = new BinaryReader(ms);
+                        float f = br.ReadSingle();
+                        oscM.values.Add(f);
+                        break;
                 }
             }
             messages.Add(oscM);
@@ -872,15 +757,6 @@ namespace UnityOSC
             int index = start;
             while (packet[index] != 0 && index < length)
                 sb.Append((char)packet[index++]);
-            return sb.ToString();
-        }
-
-        private static string Dump(byte[] packet, int start, int length)
-        {
-            StringBuilder sb = new StringBuilder();
-            int index = start;
-            while (index < length)
-                sb.Append(packet[index++] + "|");
             return sb.ToString();
         }
 
@@ -916,7 +792,7 @@ namespace UnityOSC
         /// Takes a length and returns what it would be if padded to the nearest 4 bytes.
         /// </summary>
         /// <param name="rawSize">Original size</param>
-        /// <returns>padded size</returns>
+        /// <returns>The padded size</returns>
         private static int PadSize(int rawSize)
         {
             int pad = rawSize % 4;
