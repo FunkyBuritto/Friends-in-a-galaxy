@@ -21,5 +21,8 @@
         {
             OSCHandler.AddUserHook("/Device/" + address, ip, handler);
         }
+
+        public static OSCUser GetDriver() => LobbyManager.instance.users[0];
+        public static OSCUser GetGunner() => LobbyManager.instance.users[1];
     }
 }
