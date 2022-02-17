@@ -21,6 +21,8 @@ public class BoosterController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (useKeyboard)
+            boostSpeed = 0.1f;
         shipBody = GetComponentInParent<Rigidbody2D>();
         spriteTransform = GetComponentsInChildren<Transform>()[1];
     }
@@ -29,7 +31,7 @@ public class BoosterController : MonoBehaviour
     void Update()
     {
         if (useKeyboard) {
-            inputValue = Input.GetAxisRaw("Horizontal");
+            inputValue = Input.GetAxis("Horizontal");
             boosting = Input.GetKey(KeyCode.Space);
         }
         else {
@@ -50,13 +52,13 @@ public class BoosterController : MonoBehaviour
             shipBody.AddForceAtPosition(transform.up.normalized * boostSpeed, spriteTransform.position, ForceMode2D.Impulse);
         }
 
-        if (!(Mathf.Abs(inputValue) < 0.1))
+        if (!(Mathf.Abs(inputValue) < 0.1 || useKeyboard))
             RotateBooster(inputValue);
     }
     public void RotateBooster(float value) {
         float angle = value * maxRotation;
         angle = (angle > 180) ? Mathf.Clamp(angle - 360, -maxRotation, maxRotation) : Mathf.Clamp(angle, -maxRotation, maxRotation);
-        transform.rotation = Quaternion.Euler(0, 0, angle);
+        transform.localRotation = Quaternion.Euler(0, 0, angle);
     }
 
     public void setInput(ArrayList list) { inputValue = (float)list[0]; }
