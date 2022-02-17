@@ -1,4 +1,7 @@
-﻿namespace UnityOSC
+﻿using System;
+using System.Collections;
+
+namespace UnityOSC
 {
     [System.Serializable]
     public class OSCUser
@@ -17,9 +20,9 @@
         /// </summary>
         /// <param name="address">The OSC address {type}</param>
         /// <param name="handler">The callback for when a message is recieved</param>
-        public void AddHook(string address, OscMessageHandler handler)
+        public void AddHook(string address, Action<ArrayList> handler)
         {
-            OSCHandler.AddUserHook("/Device/" + address, ip, handler);
+            OSCHandler.AddUserHook("/Device/" + address, ip, (msg) => { handler.Invoke(msg.values); });
         }
 
         public static OSCUser GetDriver() => LobbyManager.instance.users[0];
