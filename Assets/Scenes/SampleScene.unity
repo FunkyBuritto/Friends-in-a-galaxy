@@ -331,9 +331,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a34cc3592e2da114083023c1729985c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputValue: 0
   useKeyboard: 1
-  rotationSpeed: 75
+  boostSpeed: 0.1
+  rotationSpeed: 150
   maxRotation: 45
 --- !u!1 &519420028
 GameObject:
@@ -633,8 +633,8 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.1
+  m_LinearDrag: 1
+  m_AngularDrag: 2
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
@@ -806,7 +806,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputValue: 0
-  useKeyboard: 1
+  useKeyboard: 0
   rotationSpeed: 50
 --- !u!1 &2132637346
 GameObject:
