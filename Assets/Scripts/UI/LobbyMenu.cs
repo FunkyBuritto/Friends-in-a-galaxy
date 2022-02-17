@@ -11,7 +11,7 @@ public class LobbyMenu : MonoBehaviour
     [SerializeField] private RectTransform cursorParent;
     [SerializeField] private GameObject cursorUI;
     private readonly List<RectTransform> cursors = new List<RectTransform>();
-    private readonly List<Vector3> cursorPositions = new List<Vector3>();
+    [HideInInspector] public readonly List<Vector3> cursorPositions = new List<Vector3>();
 
     private void Start()
     {
