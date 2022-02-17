@@ -5,10 +5,12 @@ using UnityOSC;
 
 public class TurretController : MonoBehaviour
 {
-    [HideInInspector] public float inputValue = 0;
-
     public bool useKeyboard = false;
     public float rotationSpeed;
+
+    float inputValue = 0;
+    bool shooting = false;
+    bool addedUser = false;
     OSCUser user;
 
     // Start is called before the first frame update
@@ -20,7 +22,25 @@ public class TurretController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        inputValue = useKeyboard ? Input.GetAxisRaw("Horizontal") : 0;
+        if (useKeyboard)
+        {
+            inputValue = Input.GetAxisRaw("Horizontal");
+            shooting = Input.GetKey(KeyCode.Space);
+        }
+        else
+        {
+            if (!addedUser)
+            {
+                user = OSCUser.GetDriver();
+                addedUser = true;
+            }
+            else
+            {
+                user.AddHook("gravity", setInput);
+                user.AddHook("touch0", setTouch);
+            }
+        }
+        
         if (Mathf.Abs(inputValue) < 0.1)
             return;
 
@@ -28,5 +48,8 @@ public class TurretController : MonoBehaviour
     }
 
     public void RotateTurret(float value) { transform.Rotate(new Vector3(0, 0, -inputValue * rotationSpeed * Time.deltaTime)); }
+
+    public void setInput(ArrayList list) { inputValue = (float)list[0]; }
+    public void setTouch(ArrayList list) { Debug.Log("shoot"); }
 
 }

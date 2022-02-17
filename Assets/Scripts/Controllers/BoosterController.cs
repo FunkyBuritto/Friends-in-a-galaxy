@@ -33,15 +33,13 @@ public class BoosterController : MonoBehaviour
             boosting = Input.GetKey(KeyCode.Space);
         }
         else {
-            if (!addedUser)
-            {
+            if (!addedUser) {
                 user = OSCUser.GetDriver();
                 addedUser = true;
             }
-            else
-            {
+            else {
                 user.AddHook("gravity", setInput);
-                user.AddHook("touch", setTouch);
+                user.AddHook("touch0", setTouch);
             }
         }
     }
@@ -55,7 +53,11 @@ public class BoosterController : MonoBehaviour
         if (!(Mathf.Abs(inputValue) < 0.1))
             RotateBooster(inputValue);
     }
-    public void RotateBooster(float value) { transform.Rotate(new Vector3(0, 0, -inputValue * rotationSpeed * Time.deltaTime)); }
+    public void RotateBooster(float value) {
+        float angle = value * maxRotation;
+        angle = (angle > 180) ? Mathf.Clamp(angle - 360, -maxRotation, maxRotation) : Mathf.Clamp(angle, -maxRotation, maxRotation);
+        transform.rotation = Quaternion.Euler(0, 0, angle);
+    }
 
     public void setInput(ArrayList list) { inputValue = (float)list[0]; }
     public void setTouch(ArrayList list) { shipBody.AddForceAtPosition(transform.up.normalized * boostSpeed, spriteTransform.position, ForceMode2D.Impulse); }
