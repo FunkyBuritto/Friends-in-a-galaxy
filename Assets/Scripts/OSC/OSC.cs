@@ -424,10 +424,8 @@ namespace UnityOSC
                     else Thread.Sleep(5);
                 }
             }
-            catch (Exception e)
-            {
-                Debug.Log("ThreadAbortException" + e);
-            }
+            catch (Exception)
+            { }
         }
 
         /// <summary>

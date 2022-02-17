@@ -176,9 +176,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0e76e9f75e0c584f8a214f8ce8f572b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inPort: 7060
-  outIP: 192.168.165.111
-  outPort: 7060
+  inPort: 25656
+  outIP: 192.168.131.111
+  outPort: 25656
 --- !u!20 &143135149
 Camera:
   m_ObjectHideFlags: 0
