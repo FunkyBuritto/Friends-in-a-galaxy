@@ -75,10 +75,8 @@ namespace UnityOSC
                 Sender.Close();
 
             if (Receiver != null)
-            {
                 Receiver.Close();
-                // Debug.Log("UDP receiver closed");
-            }
+
             Receiver = null;
             socketsOpen = false;
         }
@@ -92,10 +90,7 @@ namespace UnityOSC
         /// Query the open state of the UDP socket.
         /// </summary>
         /// <returns>True if open, false if closed.</returns>
-        public bool IsOpen()
-        {
-            return socketsOpen;
-        }
+        public bool IsOpen() => socketsOpen;
 
         /// <summary>
         /// Send a packet of bytes out via UDP.
@@ -136,8 +131,6 @@ namespace UnityOSC
             Array.Copy(incoming, buffer, count);
             return new UDPPacket() { length = count, address = iep.ToString() };
         }
-
-
 
         /// <summary>
         /// The address of the board that you're sending to.
@@ -201,13 +194,10 @@ namespace UnityOSC
                 s.Append(o.ToString());
             }
             return s.ToString();
-
         }
-
 
         public int GetInt(int index)
         {
-
             if (values[index].GetType() == typeof(int))
             {
                 int data = (int)values[index];
@@ -229,7 +219,6 @@ namespace UnityOSC
 
         public float GetFloat(int index)
         {
-
             if (values[index].GetType() == typeof(int))
             {
                 float data = (int)values[index];
@@ -248,7 +237,6 @@ namespace UnityOSC
                 return 0f;
             }
         }
-
     }
 
     public delegate void OscMessageHandler(OscMessage oscM);
@@ -268,29 +256,26 @@ namespace UnityOSC
     /// 
     /// Messages can be encoded and decoded from Strings via the static methods on this class, or
     /// can be hand assembled / disassembled since they're just a string (the address) and a list 
-    /// of other parameters in Object form. 
-    /// 
+    /// of other parameters in Object form.
     /// </summary>
     public class OSC : MonoBehaviour
     {
-        public int inPort = 6969;
-        public string outIP = "127.0.0.1";
-        public int outPort = 6161;
+        [SerializeField] private int serverPort = 6969;
+        [SerializeField] private string serverIP = "127.0.0.1";
+        [SerializeField] private int clientPort = 6161;
 
         private UDPPacketIO OscPacketIO;
-        Thread ReadThread;
+        private Thread ReadThread;
         private bool ReaderRunning;
         private OscMessageHandler AllMessageHandler;
 
-        Hashtable AddressTable;
+        private Hashtable AddressTable;
+        private ArrayList messagesReceived;
 
-        ArrayList messagesReceived;
+        private readonly object ReadThreadLock = new object();
 
-        private object ReadThreadLock = new object();
-
-        byte[] buffer;
-
-        bool paused = false;
+        private byte[] buffer;
+        private bool paused = false;
 
         #if UNITY_EDITOR
         private void HandleOnPlayModeChanged(UnityEditor.PlayModeStateChange state)
@@ -301,7 +286,7 @@ namespace UnityOSC
 
         void Awake()
         {
-            OscPacketIO = new UDPPacketIO(outIP, outPort, inPort);
+            OscPacketIO = new UDPPacketIO(serverIP, clientPort, serverPort);
             AddressTable = new Hashtable();
 
             messagesReceived = new ArrayList();
@@ -344,10 +329,10 @@ namespace UnityOSC
 
         void OnApplicationPause(bool pauseStatus)
         {
-    #if !UNITY_EDITOR
+            #if !UNITY_EDITOR
             paused = pauseStatus;
             print("Application paused : " + pauseStatus);
-    #endif
+            #endif
         }
 
         void Update()
@@ -378,7 +363,6 @@ namespace UnityOSC
         /// <summary>
         /// Make sure the PacketExchange is closed.
         /// </summary>
-        /// 
         public void Close()
         {
             if (ReaderRunning)
@@ -395,10 +379,9 @@ namespace UnityOSC
             }
         }
 
-
         /// <summary>
-        /// Read Thread.  Loops waiting for packets.  When a packet is received, it is 
-        /// dispatched to any waiting All Message Handler.  Also, the address is looked up and
+        /// Read Thread. Loops waiting for packets. When a packet is received, it is 
+        /// dispatched to any waiting All Message Handler. Also, the address is looked up and
         /// any matching handler is called.
         /// </summary>
         private void Read()
@@ -418,18 +401,16 @@ namespace UnityOSC
                                 ArrayList newMessages = OSC.PacketToOscMessages(buffer, packet);
                                 messagesReceived.AddRange(newMessages);
                             }
-
                         }
                     }
                     else Thread.Sleep(5);
                 }
             }
-            catch (Exception)
-            { }
+            catch (Exception) { }
         }
 
         /// <summary>
-        /// Send an individual OSC message.  Internally takes the OscMessage object and 
+        /// Send an individual OSC message. Internally takes the OscMessage object and 
         /// serializes it into a byte[] suitable for sending to the PacketIO.
         /// </summary>
         /// <param name="oscMessage">The OSC Message to send.</param>   
@@ -441,7 +422,7 @@ namespace UnityOSC
         }
 
         /// <summary>
-        /// Sends a list of OSC Messages.  Internally takes the OscMessage objects and 
+        /// Sends a list of OSC Messages. Internally takes the OscMessage objects and 
         /// serializes them into a byte[] suitable for sending to the PacketExchange.
         /// </summary>
         /// <param name="oms">The OSC Message to send.</param>   
@@ -467,9 +448,7 @@ namespace UnityOSC
         public static OscMessage StringToOscMessage(string message)
         {
             OscMessage oM = new OscMessage();
-            Console.WriteLine("Splitting " + message);
-            string[] ss = message.Split(new char[] { ' ' });
-            IEnumerator sE = ss.GetEnumerator();
+            IEnumerator sE = message.Split(' ').GetEnumerator();
             if (sE.MoveNext())
                 oM.address = (string)sE.Current;
             while (sE.MoveNext())
@@ -562,7 +541,7 @@ namespace UnityOSC
                 index = InsertString("#bundle", packet, index, length);
                 // Write a null timestamp (another 8bytes)
                 int c = 8;
-                while ((c--) > 0)
+                while (c-- > 0)
                     packet[index++]++;
                 // Now, put each message preceded by it's length
                 foreach (OscMessage oscM in messages)
@@ -595,7 +574,7 @@ namespace UnityOSC
         }
 
         /// <summary>
-        /// Creates an array of bytes from a single OscMessage.  Used internally.
+        /// Creates an array of bytes from a single OscMessage. Used internally.
         /// </summary>
         /// <remarks>Can specify where in the array of bytes the OscMessage should be put.</remarks>
         /// <param name="oscM">The OscMessage to be turned into an array of bytes.</param>
@@ -607,52 +586,49 @@ namespace UnityOSC
         {
             int index = start;
             index = InsertString(oscM.address, packet, index, length);
-            {
-                StringBuilder tag = new StringBuilder();
-                tag.Append(",");
-                int tagIndex = index;
-                index += PadSize(2 + oscM.values.Count);
 
-                foreach (object o in oscM.values)
+            StringBuilder tag = new StringBuilder();
+            tag.Append(",");
+            int tagIndex = index;
+            index += PadSize(2 + oscM.values.Count);
+
+            foreach (object o in oscM.values)
+            {
+                if (o is int i)
                 {
-                    if (o is int i)
+                    tag.Append("i");
+                    packet[index++] = (byte)((i >> 24) & 0xFF);
+                    packet[index++] = (byte)((i >> 16) & 0xFF);
+                    packet[index++] = (byte)((i >> 8) & 0xFF);
+                    packet[index++] = (byte)((i) & 0xFF);
+                }
+                else
+                {
+                    if (o is float f)
                     {
-                        tag.Append("i");
-                        packet[index++] = (byte)((i >> 24) & 0xFF);
-                        packet[index++] = (byte)((i >> 16) & 0xFF);
-                        packet[index++] = (byte)((i >> 8) & 0xFF);
-                        packet[index++] = (byte)((i) & 0xFF);
+                        tag.Append("f");
+                        byte[] buffer = new byte[4];
+                        MemoryStream ms = new MemoryStream(buffer);
+                        BinaryWriter bw = new BinaryWriter(ms);
+                        bw.Write(f);
+                        packet[index++] = buffer[3];
+                        packet[index++] = buffer[2];
+                        packet[index++] = buffer[1];
+                        packet[index++] = buffer[0];
                     }
                     else
                     {
-                        if (o is float f)
+                        if (o is string)
                         {
-                            tag.Append("f");
-                            byte[] buffer = new byte[4];
-                            MemoryStream ms = new MemoryStream(buffer);
-                            BinaryWriter bw = new BinaryWriter(ms);
-                            bw.Write(f);
-                            packet[index++] = buffer[3];
-                            packet[index++] = buffer[2];
-                            packet[index++] = buffer[1];
-                            packet[index++] = buffer[0];
+                            tag.Append("s");
+                            index = InsertString(o.ToString(), packet, index, length);
                         }
-                        else
-                        {
-                            if (o is string)
-                            {
-                                tag.Append("s");
-                                index = InsertString(o.ToString(), packet, index, length);
-                            }
-                            else
-                            {
-                                tag.Append("?");
-                            }
-                        }
+                        else tag.Append("?");
                     }
                 }
-                InsertString(tag.ToString(), packet, tagIndex, length);
             }
+            InsertString(tag.ToString(), packet, tagIndex, length);
+
             return index;
         }
 
@@ -701,9 +677,11 @@ namespace UnityOSC
         /// <returns>The index after the OscMessage is read.</returns>
         private static int ExtractMessage(ArrayList messages, byte[] packet, int start, int length, string address)
         {
-            OscMessage oscM = new OscMessage();
-            oscM.address = ExtractString(packet, start, length);
-            oscM.ip = address;
+            OscMessage oscM = new OscMessage
+            {
+                address = ExtractString(packet, start, length),
+                ip = address
+            };
             int index = start + PadSize(oscM.address.Length + 1);
             string typeTag = ExtractString(packet, index, length);
             index += PadSize(typeTag.Length + 1);
@@ -761,7 +739,7 @@ namespace UnityOSC
         /// <summary>
         /// Inserts a string, correctly padded into a packet.  Used internally.
         /// </summary>
-        /// <param name="string">The string to be inserted</param>
+        /// <param name="s">The string to be inserted</param>
         /// <param name="packet">The packet of bytes to be parsed.</param>
         /// <param name="start">The index of where to start looking in the packet.</param>
         /// <param name="length">The length of the packet.</param>
@@ -794,10 +772,8 @@ namespace UnityOSC
         private static int PadSize(int rawSize)
         {
             int pad = rawSize % 4;
-            if (pad == 0)
-                return rawSize;
-            else
-                return rawSize + (4 - pad);
+            if (pad == 0) return rawSize;
+            else return rawSize + (4 - pad);
         }
     }
 }
