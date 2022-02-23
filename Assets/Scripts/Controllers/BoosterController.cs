@@ -9,13 +9,14 @@ public class BoosterController : MonoBehaviour
     public float boostSpeed;
     public float rotationSpeed;
     public float maxRotation;
+    public ParticleSystem ps;
 
     float inputValue = 0;
     bool boosting = false;
     bool addedUser = false;
 
-    float prevValue;
-    float currValue;
+    float prevTouchTime;
+    float currTime;
 
     Rigidbody2D shipBody;
     Transform spriteTransform;
@@ -31,6 +32,7 @@ public class BoosterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        currTime = Time.time;
         if (useKeyboard) {
             inputValue = Input.GetAxis("Horizontal");
             boosting = Input.GetKey(KeyCode.Space);
@@ -45,6 +47,12 @@ public class BoosterController : MonoBehaviour
                 user.AddHook("touch0", setTouch);
             }
         }
+        if (timeTillTouch() > 0.1 && ps.isPlaying)
+        {
+            Debug.Log("Stopped");
+            ps.Stop();
+        }
+            
     }
 
     private void FixedUpdate()
@@ -64,9 +72,13 @@ public class BoosterController : MonoBehaviour
 
     public void setInput(ArrayList list) { inputValue = (float)list[0]; }
     public void setTouch(ArrayList list) {
-        currValue = Time.time;
-        float deltaTime = Mathf.Clamp(currValue - prevValue,0, 0.1f);
-        shipBody.AddForceAtPosition(transform.up.normalized * boostSpeed * deltaTime, spriteTransform.position, ForceMode2D.Impulse);
-        prevValue = currValue;
+        
+        if (!ps.isPlaying)
+            ps.Play();
+        shipBody.AddForceAtPosition(transform.up.normalized * boostSpeed * Mathf.Clamp(timeTillTouch(), 0, 0.1f), spriteTransform.position, ForceMode2D.Impulse);
+        prevTouchTime = Time.time;
     }
+
+    public float timeTillTouch() => Time.time - prevTouchTime;
+
 }
