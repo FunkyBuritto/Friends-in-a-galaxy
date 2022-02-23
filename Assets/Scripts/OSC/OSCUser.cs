@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace UnityOSC
 {
-    [System.Serializable]
+    [Serializable]
     public class OSCUser
     {
         // Ip address of this user.
@@ -22,7 +22,7 @@ namespace UnityOSC
         /// <param name="handler">The callback for when a message is recieved</param>
         public void AddHook(string address, Action<ArrayList> handler)
         {
-            OSCHandler.AddUserHook("/Device/" + address, ip, (msg) => { handler.Invoke(msg.values); });
+            OSCHandler.AddUserHook($"/{Constants.UUID}/" + address, ip, (msg) => { handler.Invoke(msg.values); });
         }
 
         public static OSCUser GetDriver() => LobbyManager.instance.users[0];

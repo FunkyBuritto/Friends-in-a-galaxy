@@ -35,14 +35,14 @@ public class OSCHandler : MonoBehaviour
     /// <summary>
     /// Add a hook into the OSC server that triggers on EVERY message.
     /// </summary>
-    /// <param name="handler"></param>
+    /// <param name="handler">The callback for when a message is matched</param>
     public static void AddGlobalHook(OscMessageHandler handler)
     {
         instance.SetAllMessageHandler(handler);
     }
 
     /// <summary>
-    /// Add a hook into the OSC server that trigger for every user.
+    /// Add a hook into the OSC server that triggers for every user.
     /// </summary>
     /// <param name="address">The OSC address /Device/{type}</param>
     /// <param name="handler">The callback for when a message is matched</param>
