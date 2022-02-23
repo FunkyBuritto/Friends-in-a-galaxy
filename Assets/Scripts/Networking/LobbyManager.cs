@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityOSC;
 
 public class LobbyManager : MonoBehaviour
@@ -13,7 +14,7 @@ public class LobbyManager : MonoBehaviour
     /// Events
     public delegate void ConnectionEvent(OSCUser user, int index);
     public event ConnectionEvent OnConnection;
-    public delegate void DisconnectEvent(int index);
+    public delegate void DisconnectEvent(int index, string ip);
     public event DisconnectEvent OnDisconnect;
 
     private void Awake()
@@ -32,6 +33,14 @@ public class LobbyManager : MonoBehaviour
     {
         // Add a global hook.
         OSCHandler.AddGlobalHook(OnMessage);
+    }
+
+    /// <summary>
+    /// Start the game by loading the game scene.
+    /// </summary>
+    public void StartGame()
+    {
+        SceneManager.LoadScene(Constants.GAMESCENE);
     }
 
     /// <summary>
@@ -77,7 +86,7 @@ public class LobbyManager : MonoBehaviour
     private IEnumerator Timeout(OSCUser user)
     {
         yield return new WaitForSeconds(2f);
-        if (OnDisconnect != null) OnDisconnect.Invoke(users.IndexOf(user));
+        if (OnDisconnect != null) OnDisconnect.Invoke(users.IndexOf(user), user.ip);
         users.Remove(user); // Remove the user once they time out.
     }
 }
