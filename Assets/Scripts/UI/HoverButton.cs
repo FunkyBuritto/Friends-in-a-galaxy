@@ -12,10 +12,23 @@ public class HoverButton : MonoBehaviour
     [SerializeField] private RectTransform mask;
     private readonly Dictionary<string, bool> cursors = new Dictionary<string, bool>();
     private LobbyMenu menu;
+    private bool active;
+    private float charge;
 
     private void Start()
     {
         OSCHandler.AddGlobalSpecificHook($"/{Constants.UUID}/gravity", LookForHover);
+        charge = 0;
+    }
+
+    private void Update()
+    {
+        // Handle the timer on hover.
+        if (active) charge += Time.deltaTime;
+        else charge = Mathf.Clamp(charge - Time.deltaTime / 3.0f, 0.0f, Mathf.Infinity);
+        if (charge >= 3.0f) onActivate.Invoke();
+
+        mask.GetComponent<Image>().color = Color.Lerp(Color.red, Color.blue, charge / 3.0f);
     }
 
     /// <summary>
@@ -40,12 +53,7 @@ public class HoverButton : MonoBehaviour
             cursors[msg.ip] = cursor.x > corners[0].x && cursor.x < corners[2].x && cursor.y > corners[0].y && cursor.y < corners[1].y;
 
             // Check if all cursors are over the button:
-            if (cursors.Values.All(c => c))
-            {
-                if (onActivate != null) onActivate.Invoke();
-                mask.GetComponent<Image>().color = Color.blue;
-            }
-            else mask.GetComponent<Image>().color = Color.red;
+            active = cursors.Values.All(c => c);
         }
         else if (cursors.ContainsKey(msg.ip) == true) cursors.Remove(msg.ip);
     }
