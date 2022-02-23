@@ -27,7 +27,7 @@ public class HoverButton : MonoBehaviour
         if (menu == null) menu = FindObjectOfType<LobbyMenu>();
         if (cursors.ContainsKey(msg.ip) == false) cursors.Add(msg.ip, false);
 
-        if (menu.cursors.Exists(c => c.ip == msg.ip))
+        if (menu != null && menu.cursors.Exists(c => c.ip == msg.ip))
         {
             // Get the cursor position.
             Vector3 cursor = menu.cursors.Find(c => c.ip == msg.ip).instance.transform.position;
