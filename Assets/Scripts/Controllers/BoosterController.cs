@@ -14,6 +14,9 @@ public class BoosterController : MonoBehaviour
     bool boosting = false;
     bool addedUser = false;
 
+    float prevValue;
+    float currValue;
+
     Rigidbody2D shipBody;
     Transform spriteTransform;
     OSCUser user;
@@ -21,8 +24,6 @@ public class BoosterController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (useKeyboard)
-            boostSpeed = 0.1f;
         shipBody = GetComponentInParent<Rigidbody2D>();
         spriteTransform = GetComponentsInChildren<Transform>()[1];
     }
@@ -62,5 +63,10 @@ public class BoosterController : MonoBehaviour
     }
 
     public void setInput(ArrayList list) { inputValue = (float)list[0]; }
-    public void setTouch(ArrayList list) { shipBody.AddForceAtPosition(transform.up.normalized * boostSpeed, spriteTransform.position, ForceMode2D.Impulse); }
+    public void setTouch(ArrayList list) {
+        currValue = Time.time;
+        float deltaTime = Mathf.Clamp(currValue - prevValue,0, 0.1f);
+        shipBody.AddForceAtPosition(transform.up.normalized * boostSpeed * deltaTime, spriteTransform.position, ForceMode2D.Impulse);
+        prevValue = currValue;
+    }
 }
