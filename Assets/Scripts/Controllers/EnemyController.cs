@@ -67,7 +67,7 @@ public class EnemyController : MonoBehaviour
 
     void Relocating()
     {
-        float distance = Vector2.Distance(transform.position, player.transform.position);
+        float distance = Vector2.Distance(new Vector2(transform.position.x, transform.position.y / 6 * 8), player.transform.position);
         if (distance > 30){
             // maybe return to group
             state = FightState.Idle;

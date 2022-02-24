@@ -69,7 +69,6 @@ public class BoosterController : MonoBehaviour
 
     public void setInput(ArrayList list) { inputValue = (float)list[0]; }
     public void setTouch(ArrayList list) {
-        
         if (!ps.isPlaying)
             ps.Play();
         shipBody.AddForceAtPosition(transform.up.normalized * boostSpeed * Mathf.Clamp(timeTillTouch(), 0, 0.1f), spriteTransform.position, ForceMode2D.Impulse);

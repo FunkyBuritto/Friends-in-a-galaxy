@@ -33,7 +33,7 @@ public class TurretController : MonoBehaviour
         if (useKeyboard)
         {
             inputValue = Input.GetAxisRaw("Horizontal");
-            shooting = Input.GetKey(KeyCode.Space);
+            shooting = Input.GetKey(KeyCode.F);
         }
         else
         {
@@ -53,6 +53,7 @@ public class TurretController : MonoBehaviour
             return;
 
         RotateTurret(inputValue);
+        if (shooting) setTouch(new ArrayList());
     }
 
     public void RotateTurret(float value) { transform.Rotate(new Vector3(0, 0, inputValue * rotationSpeed * Time.deltaTime)); }

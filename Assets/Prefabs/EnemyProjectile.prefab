@@ -244,7 +244,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!70 &3605980308593666750
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -273,3 +273,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b97923862c8bc8142a7c0496fbaf7393, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  particle: {fileID: 1933248925534348162, guid: 3a1b2b321cb2560488c860dd045e607d, type: 3}
