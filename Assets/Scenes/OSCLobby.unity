@@ -782,9 +782,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0e76e9f75e0c584f8a214f8ce8f572b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverPort: 17293
-  serverIP: 192.168.137.89
-  clientPort: 17293
+  serverPort: 80
+  serverIP: 192.168.1.17
+  clientPort: 80
 --- !u!114 &1093792583
 MonoBehaviour:
   m_ObjectHideFlags: 0
