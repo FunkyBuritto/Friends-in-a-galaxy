@@ -20,6 +20,7 @@ public class EnemyController : MonoBehaviour
     public float movementSpeed;
     public bool isAiming = false, isReloading = false;
     public ParticleSystem ps;
+    public int Hp = 3;
 
     bool boosting = false;
     Rigidbody2D rb;
@@ -115,5 +116,14 @@ public class EnemyController : MonoBehaviour
         yield return new WaitForSeconds(0.8f);
         isReloading = false;
         state = FightState.Relocating;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Projectile"))
+            Hp--;
+
+        if (Hp <= 0)
+            Destroy(gameObject);
     }
 }

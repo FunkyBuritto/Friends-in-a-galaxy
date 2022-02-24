@@ -202,6 +202,7 @@ GameObject:
   - component: {fileID: 4542897121676503127}
   - component: {fileID: 8084141285928348556}
   - component: {fileID: -3674259749252161765}
+  - component: {fileID: 5071166915397678649}
   m_Layer: 6
   m_Name: PlayerProjectile
   m_TagString: Projectile
@@ -244,7 +245,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!70 &8084141285928348556
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -274,3 +275,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   particle: {fileID: 1933248925534348162, guid: 3a1b2b321cb2560488c860dd045e607d, type: 3}
+  target: {fileID: 0}
+  homingSpeed: 0.2
+--- !u!58 &5071166915397678649
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4542897121676503125}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 2
