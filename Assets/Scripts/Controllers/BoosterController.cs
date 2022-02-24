@@ -7,7 +7,6 @@ public class BoosterController : MonoBehaviour
 {
     public bool useKeyboard = false;
     public float boostSpeed;
-    public float rotationSpeed;
     public float maxRotation;
     public ParticleSystem ps;
 
@@ -16,7 +15,6 @@ public class BoosterController : MonoBehaviour
     bool addedUser = false;
 
     float prevTouchTime;
-    float currTime;
 
     Rigidbody2D shipBody;
     Transform spriteTransform;
@@ -32,7 +30,6 @@ public class BoosterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        currTime = Time.time;
         if (useKeyboard) {
             inputValue = Input.GetAxis("Horizontal");
             boosting = Input.GetKey(KeyCode.Space);

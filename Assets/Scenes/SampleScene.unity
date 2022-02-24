@@ -133,7 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 171064327}
   - component: {fileID: 171064328}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TurretBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -215,7 +215,7 @@ GameObject:
   m_Component:
   - component: {fileID: 247784690}
   - component: {fileID: 247784691}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BoosterBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -230,7 +230,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 247784689}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.33, z: 0}
+  m_LocalPosition: {x: 0, y: -0.075, z: 0}
   m_LocalScale: {x: 0.75, y: 0.75, z: 1}
   m_Children: []
   m_Father: {fileID: 369130120}
@@ -297,7 +297,7 @@ GameObject:
   m_Component:
   - component: {fileID: 369130120}
   - component: {fileID: 369130121}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PlayerBooster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -312,7 +312,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 369130119}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.65, z: 0}
+  m_LocalPosition: {x: 0, y: -1.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 247784690}
@@ -334,8 +334,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useKeyboard: 1
   boostSpeed: 4
-  rotationSpeed: 150
-  maxRotation: 60
+  maxRotation: 50
   ps: {fileID: 1487017056}
 --- !u!1 &519420028
 GameObject:
@@ -518,7 +517,7 @@ GameObject:
   - component: {fileID: 839708941}
   - component: {fileID: 839708943}
   - component: {fileID: 839708942}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Particle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5411,7 +5410,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1009294550}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ShootPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5444,7 +5443,8 @@ GameObject:
   - component: {fileID: 1029055663}
   - component: {fileID: 1029055665}
   - component: {fileID: 1029055666}
-  m_Layer: 0
+  - component: {fileID: 1029055667}
+  m_Layer: 7
   m_Name: SpaceShip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5530,7 +5530,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 15
+  m_Mass: 1
   m_LinearDrag: 1
   m_AngularDrag: 2
   m_GravityScale: 0
@@ -5571,6 +5571,19 @@ PolygonCollider2D:
       - {x: 0.5, y: -1.75}
       - {x: 1.5, y: -1.15}
       - {x: 1.03, y: 0.12}
+--- !u!114 &1029055667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1029055662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e55effb5c45c9e43bc980d7bc527705, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Hp: 100
 --- !u!1 &1202811751
 GameObject:
   m_ObjectHideFlags: 0
@@ -5839,7 +5852,7 @@ GameObject:
   - component: {fileID: 1487017054}
   - component: {fileID: 1487017056}
   - component: {fileID: 1487017055}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BoosterParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5854,7 +5867,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1487017053}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.003, z: 0}
+  m_LocalPosition: {x: 0, y: -0.75, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 369130120}
@@ -10654,7 +10667,7 @@ GameObject:
   - component: {fileID: 1584314570}
   - component: {fileID: 1584314571}
   - component: {fileID: 1584314572}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10740,8 +10753,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1029055662}
-  projectile: {fileID: 4542897121676503125, guid: 1523f919d8020364f81b1a97e3ad735b, type: 3}
-  projectileSpeed: 10
+  projectile: {fileID: 4542897121676503125, guid: f4b0aab51070ca842b340539ce82b6ca, type: 3}
+  projectileSpeed: 0.001
   state: 0
   movementSpeed: 150
   isAiming: 0
@@ -10794,7 +10807,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2007989321}
   - component: {fileID: 2007989322}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PlayerTurret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10833,8 +10846,8 @@ MonoBehaviour:
   useKeyboard: 1
   rotationSpeed: 75
   shootPoint: {fileID: 1009294550}
-  attackDelay: 0.25
-  projectileSpeed: 10
+  attackDelay: 0.35
+  projectileSpeed: 5
   projectile: {fileID: 4542897121676503125, guid: 1523f919d8020364f81b1a97e3ad735b, type: 3}
 --- !u!1 &2132637346
 GameObject:
@@ -10846,7 +10859,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2132637347}
   - component: {fileID: 2132637348}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TurretBarrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}

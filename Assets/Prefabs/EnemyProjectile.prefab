@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4542897120253273157}
   - component: {fileID: 4542897120253273159}
   - component: {fileID: 4337331563424100688}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -127,7 +127,7 @@ TrailRenderer:
   m_Time: 0.15
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.25
+    widthMultiplier: 0.09
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -200,9 +200,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4542897121676503126}
   - component: {fileID: 4542897121676503127}
-  - component: {fileID: 8084141285928348556}
-  m_Layer: 6
-  m_Name: PlayerProjectile
+  - component: {fileID: 3605980308593666750}
+  - component: {fileID: 1181505067339941547}
+  m_Layer: 8
+  m_Name: EnemyProjectile
   m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -217,7 +218,7 @@ Transform:
   m_GameObject: {fileID: 4542897121676503125}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_Children:
   - {fileID: 4542897120253273157}
   m_Father: {fileID: 0}
@@ -235,7 +236,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.5
+  m_Mass: 0.0001
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 0
@@ -244,7 +245,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!70 &8084141285928348556
+--- !u!70 &3605980308593666750
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -260,3 +261,15 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: -0.05}
   m_Size: {x: 0.25, y: 0.45}
   m_Direction: 0
+--- !u!114 &1181505067339941547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4542897121676503125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b97923862c8bc8142a7c0496fbaf7393, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

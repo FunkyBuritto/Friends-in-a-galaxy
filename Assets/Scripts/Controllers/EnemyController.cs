@@ -70,7 +70,7 @@ public class EnemyController : MonoBehaviour
         float distance = Vector2.Distance(transform.position, player.transform.position);
         if (distance > 30){
             // maybe return to group
-            // state = FightState.Idle;
+            state = FightState.Idle;
         }
         else if(distance < 6){
             // Go away from player
