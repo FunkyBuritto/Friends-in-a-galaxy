@@ -39,7 +39,7 @@ public class TurretController : MonoBehaviour
         {
             if (!addedUser)
             {
-                user = OSCUser.GetDriver();
+                user = OSCUser.GetGunner();
                 addedUser = true;
             }
             else
