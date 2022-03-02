@@ -17,6 +17,9 @@ public class TerrainGenerator : MonoBehaviour
     [Tooltip("Minimum distance around the portal")]
     [SerializeField] private float portalClearance = 100.0f;
 
+    [Header("Appearence")]
+    [SerializeField] private Gradient terrainGradient;
+
     [Header("Prefabs")]
     [SerializeField] private GameObject[] rocks;
 
@@ -133,6 +136,8 @@ public class TerrainGenerator : MonoBehaviour
                 rock.position = point;
                 rock.rotation = Quaternion.Euler(0, 0, Random.Range(0.0f, 360.0f));
                 rock.gameObject.name = "Rock";
+
+                rock.GetComponent<SpriteRenderer>().color = terrainGradient.Evaluate(Mathf.PerlinNoise(point.x / radius, point.y / radius));
             }
         }
     }

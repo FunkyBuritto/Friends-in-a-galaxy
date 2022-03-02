@@ -240,6 +240,35 @@ MonoBehaviour:
   voronoiPoints: 100
   minDist: 55
   portalClearance: 50
+  terrainGradient:
+    serializedVersion: 2
+    key0: {r: 0, g: 0.41401887, b: 1, a: 1}
+    key1: {r: 0, g: 0.41401887, b: 1, a: 1}
+    key2: {r: 0.09473467, g: 1, b: 0, a: 0}
+    key3: {r: 0.09473467, g: 1, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 65535
+    ctime3: 65535
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
   rocks:
   - {fileID: 4113854652928449594, guid: 5e806d2b07ece3a4f9fff2cb024ff21f, type: 3}
   - {fileID: 7795936296497589264, guid: 3dc5f063b3eb0994c920c6c0f28b6c58, type: 3}
@@ -329,7 +358,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: d19fa800e93195441b77051577c1a852, type: 3}
-  m_Color: {r: 0.8117648, g: 0.78823537, b: 0.8431373, a: 1}
+  m_Color: {r: 0.9071098, g: 0.88697046, b: 0.9339623, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -477,7 +506,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 9
+  orthographic size: 12
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -862,7 +891,7 @@ MonoBehaviour:
   m_Follow: {fileID: 1029055664}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 9
+    OrthographicSize: 12
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
