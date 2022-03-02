@@ -18,15 +18,19 @@ public class TerrainGenerator : MonoBehaviour
     [SerializeField] private float portalClearance = 100.0f;
 
     [Header("Appearence")]
+    [SerializeField] private float gradientFrequency = 2.0f;
     [SerializeField] private Gradient terrainGradient;
 
     [Header("Prefabs")]
     [SerializeField] private GameObject[] rocks;
 
+    [HideInInspector] public Vector2 seed;
     private LinkedList<VEdge> diagram;
 
     private void Start()
     {
+        seed = new Vector2(Random.Range(0.0f, 256.0f), Random.Range(0.0f, 256.0f));
+
         // Generate the points for the voronoi diagram.
         List<FortuneSite> points = GenerateVPoints(voronoiPoints, terrainRadius, minDist);
 
@@ -137,9 +141,19 @@ public class TerrainGenerator : MonoBehaviour
                 rock.rotation = Quaternion.Euler(0, 0, Random.Range(0.0f, 360.0f));
                 rock.gameObject.name = "Rock";
 
-                rock.GetComponent<SpriteRenderer>().color = terrainGradient.Evaluate(Mathf.PerlinNoise(point.x / radius, point.y / radius));
+                rock.GetComponent<SpriteRenderer>().color = TerrainColor(point);
             }
         }
+    }
+
+    /// <summary>
+    /// Sample the terrain color.
+    /// </summary>
+    /// <param name="point">The sample point.</param>
+    /// <returns>The color of the terrain at the sample point.</returns>
+    public Color TerrainColor(Vector2 point)
+    {
+        return terrainGradient.Evaluate(Mathf.PerlinNoise(point.x / terrainRadius * gradientFrequency + seed.x, point.y / terrainRadius * gradientFrequency + seed.y));
     }
 
     #region Deprecated

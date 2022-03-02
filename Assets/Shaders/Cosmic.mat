@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Cosmic
+  m_Shader: {fileID: -6465566751694194690, guid: f8e6ab4727fe6424eae60175e99cd853, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - Texture2D_85cf32db1ff846eab43929e8ae133647:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_8e0c99f43fe44595beb37f5634902b84:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_0394917bad824fe8b9ce4ed28ae4db5a: 0.01
+    - Vector1_2ab9ff03762c4c0881578cc060e70f5a: 5000
+    - Vector1_410ce4ca84bd4ff791d8eb2ec87faf5e: 1999
+    - Vector1_4c53edc41d184a32ae0aeef41c910bd2: 10924
+    - Vector1_5ac8f080443b45c8a05e06f8cfd90df6: 3
+    - Vector1_65cd805a4e344ef996747d9e7d1fb3ce: 3000
+    - Vector1_c194304dc1f24e7ba14cc1e016557148: 1000
+    - Vector1_df94e281d8974ddf960df7b51e0907fe: 500
+    - Vector1_e86257ac585f4fbe847de5c9b5a5cb5d: 475
+    - Vector1_e86257ac585f4fbe847de5c9b5a5cb5d_1: 475
+    m_Colors:
+    - Color_1: {r: 0.17610055, g: 0.45160717, b: 1, a: 1}
+    - Color_1759016e421044ac9d63b6a39bf3abeb: {r: 0.47110364, g: 1, b: 0.3339622, a: 1}
+    - Color_1dbc81aad34e4a9a90c116b08c4e2a5c: {r: 0.665067, g: 0.17974365, b: 0.9339623, a: 0}
+    - Color_2: {r: 0.9729431, g: 0.28930813, b: 1, a: 0}
+  m_BuildTextureStacks: []
