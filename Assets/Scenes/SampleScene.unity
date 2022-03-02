@@ -7660,7 +7660,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a34cc3592e2da114083023c1729985c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useKeyboard: 0
+  useKeyboard: 1
   boostSpeed: 4
   maxRotation: 50
   ps: {fileID: 1487017056}
@@ -47595,7 +47595,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e66a6c1b127179f4a975756da9d7cd39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useKeyboard: 0
+  useKeyboard: 1
   rotationSpeed: 75
   shootPoint: {fileID: 1009294550}
   attackDelay: 0.35

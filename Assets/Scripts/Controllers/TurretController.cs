@@ -32,8 +32,10 @@ public class TurretController : MonoBehaviour
     {
         if (useKeyboard)
         {
-            inputValue = Input.GetAxisRaw("Horizontal");
-            shooting = Input.GetKey(KeyCode.F);
+            if (!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.LeftArrow)) inputValue = 0;
+            inputValue = Input.GetKey(KeyCode.LeftArrow) ? 1 : inputValue;
+            inputValue = Input.GetKey(KeyCode.RightArrow) ? -1 : inputValue;
+            shooting = Input.GetMouseButton(0);
         }
         else
         {

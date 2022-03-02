@@ -31,6 +31,7 @@ public class BoosterController : MonoBehaviour
     void Update()
     {
         if (useKeyboard) {
+            boostSpeed = 0.1f;
             inputValue = Input.GetAxis("Horizontal");
             boosting = Input.GetKey(KeyCode.Space);
         }
@@ -46,7 +47,6 @@ public class BoosterController : MonoBehaviour
         }
         if (timeTillTouch() > 0.1 && ps.isPlaying)
         {
-            Debug.Log("Stopped");
             ps.Stop();
         }
             
@@ -58,8 +58,11 @@ public class BoosterController : MonoBehaviour
             shipBody.AddForceAtPosition(transform.up.normalized * boostSpeed, spriteTransform.position, ForceMode2D.Impulse);
         }
 
-        if (!(Mathf.Abs(inputValue) < 0.1 || useKeyboard))
+        if (useKeyboard)
             RotateBooster(inputValue);
+        else
+            if (!(Mathf.Abs(inputValue) < 0.1))
+                RotateBooster(inputValue);
     }
     public void RotateBooster(float value) {
         float angle = value * maxRotation;
