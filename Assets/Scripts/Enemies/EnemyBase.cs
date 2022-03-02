@@ -27,12 +27,12 @@ public class EnemyBase : MonoBehaviour
     public bool isAiming = false, isReloading = false;
 
     [Header("Shooting")]
-    public ParticleSystem ps;
     public GameObject projectile;
     public float projectileSpeed;
     public float reloadSpeed;
 
     [Header("Movement")]
+    public ParticleSystem ps;
     public float rotationSpeed;
     public float movementSpeed;
     public int Hp = 3;
