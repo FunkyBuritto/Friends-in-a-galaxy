@@ -13,7 +13,7 @@ public class ShipController : MonoBehaviour
         tg = FindObjectOfType<TerrainGenerator>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         SpaceBackground.UpdateBackground(tg.TerrainColor(transform.position));
     }

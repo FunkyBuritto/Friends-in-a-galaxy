@@ -24,15 +24,17 @@ public class SpaceBackground : MonoBehaviour
         {
             for (int i = 0; i < instance.transform.childCount; i++)
             {
-                if (instance.transform.GetChild(i).name != match.obj.name && !LeanTween.isTweening(instance.transform.GetChild(i).gameObject))
+                GameObject child = instance.transform.GetChild(i).gameObject;
+                SpriteRenderer sp = child.GetComponent<SpriteRenderer>();
+
+                if (child.name != match.obj.name && !LeanTween.isTweening(child) && child.activeSelf == true)
                 {
-                    int j = i;
-                    LeanTween.alpha(instance.transform.GetChild(j).gameObject, 0.0f, 2.0f).setOnComplete(() => instance.transform.GetChild(j).gameObject.SetActive(false));
+                    LeanTween.value(child, e => sp.color = new Color(1f, 1f, 1f, e), 1.0f, 0.0f, 2.0f).setOnComplete(() => child.SetActive(false));
                 }
-                else if (!LeanTween.isTweening(instance.transform.GetChild(i).gameObject))
+                else if (child.name == match.obj.name && !LeanTween.isTweening(child) && sp.color.a != 1.0f)
                 {
-                    instance.transform.GetChild(i).gameObject.SetActive(true);
-                    LeanTween.alpha(instance.transform.GetChild(i).gameObject, 1.0f, 2.0f);
+                    child.SetActive(true);
+                    LeanTween.value(child, e => sp.color = new Color(1f, 1f, 1f, e), 0.0f, 1.0f, 2.0f).setOnComplete(() => sp.color = new Color(1.0f, 1.0f, 1.0f, 1.0f));
                 }
             }
         }
