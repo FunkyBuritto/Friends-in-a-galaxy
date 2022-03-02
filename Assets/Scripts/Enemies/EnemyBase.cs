@@ -11,20 +11,7 @@ public class EnemyBase : MonoBehaviour
     protected float aimStartTime;
     protected float rotateLerp = 0;
 
-    public bool isAiming = false, isReloading = false;
-
-    public ParticleSystem ps;
-    public GameObject projectile;
-    public float projectileSpeed;
-    public float reloadSpeed;
-    public float rotationSpeed;
-    public float movementSpeed;
-    public int Hp = 3;
-
-    public float idleDist = 30;
-    public float attackDist = 12;
-    public float backingDist = 6;
-
+    
     public enum FightState
     {
         Relocating,
@@ -33,7 +20,27 @@ public class EnemyBase : MonoBehaviour
         Reloading,
         Idle
     }
+
+    [Header("State Machine")]
     public FightState state = FightState.Idle;
+
+    public bool isAiming = false, isReloading = false;
+
+    [Header("Shooting")]
+    public ParticleSystem ps;
+    public GameObject projectile;
+    public float projectileSpeed;
+    public float reloadSpeed;
+
+    [Header("Movement")]
+    public float rotationSpeed;
+    public float movementSpeed;
+    public int Hp = 3;
+
+    [Header("Relocating")]
+    public float idleDist = 30;
+    public float attackDist = 12;
+    public float backingDist = 6;
 
     // Start is called before the first frame update
     void Start()
@@ -127,7 +134,7 @@ public class EnemyBase : MonoBehaviour
         float lerpedAngle = Mathf.LerpAngle(transform.eulerAngles.z, angle + 90, rotateLerp);
         transform.rotation = Quaternion.AngleAxis(lerpedAngle, Vector3.forward);
 
-        if (Time.time - aimStartTime > 0.5f)
+        if (Time.time - aimStartTime > 1f)
         {
             isAiming = false;
             state = FightState.Shooting;

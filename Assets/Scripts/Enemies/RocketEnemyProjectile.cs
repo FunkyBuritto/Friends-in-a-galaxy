@@ -5,9 +5,12 @@ using UnityEngine;
 public class RocketEnemyProjectile : MonoBehaviour
 {
     public GameObject particle;
+    public int damage;
 
     [HideInInspector] public GameObject instatiator;
     [HideInInspector] public Transform target = null;
+
+    public bool inverted = false;
 
     public float trajectorySpeed;
     public float trajectoryFreq;
@@ -25,15 +28,16 @@ public class RocketEnemyProjectile : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         forward = transform.up;
+        StartCoroutine(DestroyAfter(10f));
     }
 
     private void OnCollisionEnter2D(Collision2D coll)
     {
-        if (coll.gameObject.CompareTag("Player") || coll.gameObject.CompareTag("Obstacle"))
-        {
-            Instantiate(particle, transform.position, Quaternion.identity);
-            Destroy(gameObject);
-        }
+        if (coll.gameObject.CompareTag("Player"))
+            ShipController.PlayerShip.Hp -= damage;
+
+        Instantiate(particle, transform.position, Quaternion.identity);
+        Destroy(gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D coll)
@@ -56,8 +60,15 @@ public class RocketEnemyProjectile : MonoBehaviour
         {
             trajectoryLerp += Time.deltaTime * trajectoryFreq;
             var angle = Mathf.Atan2(forward.y, forward.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.AngleAxis(Mathf.Sin(trajectoryLerp) * trajectoryRange + angle - 90, Vector3.forward);
+            transform.rotation = Quaternion.AngleAxis(Mathf.Sin(inverted ? -trajectoryLerp - 2 : trajectoryLerp + 2) * trajectoryRange + angle - 90, Vector3.forward);
             rb.velocity = transform.up.normalized * trajectorySpeed;
         }
+    }
+
+    IEnumerator DestroyAfter(float time)
+    {
+        yield return new WaitForSeconds(time);
+        Instantiate(particle, transform.position, Quaternion.identity);
+        Destroy(gameObject);
     }
 }

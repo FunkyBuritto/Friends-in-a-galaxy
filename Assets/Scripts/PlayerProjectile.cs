@@ -13,6 +13,7 @@ public class PlayerProjectile : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        StartCoroutine(DestroyAfter(10f));
     }
 
     private void OnCollisionEnter2D(Collision2D coll)
@@ -40,5 +41,12 @@ public class PlayerProjectile : MonoBehaviour
             transform.rotation = Quaternion.AngleAxis(lerpedAngle, Vector3.forward);
             rb.velocity = transform.up.normalized * lockedOnSpeed;
         }
+    }
+
+    IEnumerator DestroyAfter(float time)
+    {
+        yield return new WaitForSeconds(time);
+        Instantiate(particle, transform.position, Quaternion.identity);
+        Destroy(gameObject);
     }
 }

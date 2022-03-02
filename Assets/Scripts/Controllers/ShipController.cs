@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class ShipController : MonoBehaviour
 {
+    public static ShipController PlayerShip;
     public int Hp;
-    private void OnCollisionEnter2D(Collision2D coll)
+
+    private void Start()
     {
-        if (coll.gameObject.CompareTag("Projectile")) Hp--;
+        PlayerShip = this;
     }
 }

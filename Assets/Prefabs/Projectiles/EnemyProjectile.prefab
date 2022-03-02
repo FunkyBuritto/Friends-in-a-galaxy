@@ -72,7 +72,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: a31a0033ab22dd143bbe7fd310e91cfc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7caa8c235f3d10549ab8335369a9a26b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -123,7 +123,7 @@ TrailRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: 0
   m_Time: 0.15
   m_Parameters:
     serializedVersion: 3
@@ -154,7 +154,7 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.6745098, g: 0.5764706, b: 0.5764706, a: 1}
+      key0: {r: 1, g: 1, b: 1, a: 1}
       key1: {r: 1, g: 1, b: 1, a: 0}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -201,9 +201,9 @@ GameObject:
   - component: {fileID: 4542897121676503126}
   - component: {fileID: 4542897121676503127}
   - component: {fileID: 3605980308593666750}
-  - component: {fileID: 2083789349946314528}
+  - component: {fileID: 1181505067339941547}
   m_Layer: 8
-  m_Name: RocketProjectile
+  m_Name: EnemyProjectile
   m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -218,7 +218,7 @@ Transform:
   m_GameObject: {fileID: 4542897121676503125}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.25, y: 1.25, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_Children:
   - {fileID: 4542897120253273157}
   m_Father: {fileID: 0}
@@ -261,7 +261,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: -0.05}
   m_Size: {x: 0.25, y: 0.45}
   m_Direction: 0
---- !u!114 &2083789349946314528
+--- !u!114 &1181505067339941547
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -270,14 +270,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 4542897121676503125}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 179fd5e8029a19546979014c4d8d0ed3, type: 3}
+  m_Script: {fileID: 11500000, guid: b97923862c8bc8142a7c0496fbaf7393, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   particle: {fileID: 1933248925534348162, guid: 3a1b2b321cb2560488c860dd045e607d, type: 3}
-  instatiator: {fileID: 0}
-  target: {fileID: 0}
-  trajectorySpeed: 5
-  trajectoryFreq: 10
-  trajectoryRange: 45
-  homingSpeed: 10
-  lockedOnSpeed: 10
+  damage: 1

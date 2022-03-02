@@ -4832,7 +4832,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &788288237738360860
 Transform:
   m_ObjectHideFlags: 0
@@ -4911,15 +4911,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73054f9cad116724cb63f3f26bed7487, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  state: 0
   isAiming: 0
   isReloading: 0
   ps: {fileID: 788288237274778075}
   projectile: {fileID: 4542897121676503125, guid: f4b0aab51070ca842b340539ce82b6ca, type: 3}
   projectileSpeed: 0.001
-  rotationSpeed: 0.01
+  reloadSpeed: 0
+  rotationSpeed: 0.025
   movementSpeed: 150
   Hp: 3
-  state: 0
+  idleDist: 30
+  attackDist: 12
+  backingDist: 6
 --- !u!50 &788288237738360862
 Rigidbody2D:
   serializedVersion: 4

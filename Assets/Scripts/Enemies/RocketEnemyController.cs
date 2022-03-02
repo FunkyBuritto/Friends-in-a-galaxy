@@ -16,17 +16,18 @@ public class RocketEnemyController : EnemyBase
 
     public override void Shoot()
     {
-        GameObject proj = Instantiate(projectile);
-        Rigidbody2D rigidbd = proj.GetComponent<Rigidbody2D>();
+        GameObject proj;
+        
+        proj = Instantiate(projectile);
         proj.transform.position = transform.position + transform.right.normalized * 0.1f;
         proj.transform.rotation = transform.rotation;
-        rigidbd.AddForceAtPosition(proj.transform.up.normalized * projectileSpeed, transform.position, ForceMode2D.Impulse);
+        proj.GetComponent<Rigidbody2D>().AddForceAtPosition(proj.transform.up.normalized * projectileSpeed, transform.position, ForceMode2D.Impulse);
 
         proj = Instantiate(projectile);
-        rigidbd = proj.GetComponent<Rigidbody2D>();
+        proj.GetComponent<RocketEnemyProjectile>().inverted = true;
         proj.transform.position = transform.position - transform.right.normalized * 0.1f;
         proj.transform.rotation = transform.rotation;
-        rigidbd.AddForceAtPosition(proj.transform.up.normalized * projectileSpeed, transform.position, ForceMode2D.Impulse);
+        proj.GetComponent<Rigidbody2D>().AddForceAtPosition(proj.transform.up.normalized * projectileSpeed, transform.position, ForceMode2D.Impulse);
 
         state = FightState.Reloading;
     }
