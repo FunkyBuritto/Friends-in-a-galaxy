@@ -201,7 +201,7 @@ GameObject:
   - component: {fileID: 4542897121676503126}
   - component: {fileID: 4542897121676503127}
   - component: {fileID: 3605980308593666750}
-  - component: {fileID: 1181505067339941547}
+  - component: {fileID: 2083789349946314528}
   m_Layer: 8
   m_Name: RocketProjectile
   m_TagString: Projectile
@@ -261,7 +261,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: -0.05}
   m_Size: {x: 0.25, y: 0.45}
   m_Direction: 0
---- !u!114 &1181505067339941547
+--- !u!114 &2083789349946314528
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -270,7 +270,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4542897121676503125}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b97923862c8bc8142a7c0496fbaf7393, type: 3}
+  m_Script: {fileID: 11500000, guid: 179fd5e8029a19546979014c4d8d0ed3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   particle: {fileID: 1933248925534348162, guid: 3a1b2b321cb2560488c860dd045e607d, type: 3}
+  instatiator: {fileID: 0}
+  target: {fileID: 0}
+  trajectorySpeed: 5
+  trajectoryFreq: 10
+  trajectoryRange: 45
+  homingSpeed: 10
+  lockedOnSpeed: 10
