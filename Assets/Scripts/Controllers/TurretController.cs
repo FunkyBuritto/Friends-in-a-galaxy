@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityOSC;
 
@@ -21,14 +20,7 @@ public class TurretController : MonoBehaviour
     bool addedUser = false;
     OSCUser user;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        //user = OSCUser.GetGunner();
-    }
-
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (useKeyboard)
         {
@@ -46,22 +38,23 @@ public class TurretController : MonoBehaviour
             }
             else
             {
-                user.AddHook("gravity", setInput);
-                user.AddHook("touch0", setTouch);
+                user.AddHook("gravity", SetInput);
+                user.AddHook("touch0", SetTouch);
             }
         }
-        
+
+        if (shooting) SetTouch(new ArrayList());
+
         if (Mathf.Abs(inputValue) < 0.1)
             return;
 
-        RotateTurret(inputValue);
-        if (shooting) setTouch(new ArrayList());
+        RotateTurret();
     }
 
-    public void RotateTurret(float value) { transform.Rotate(new Vector3(0, 0, inputValue * rotationSpeed * Time.deltaTime)); }
+    public void RotateTurret() => transform.Rotate(new Vector3(0, 0, inputValue * rotationSpeed * Time.deltaTime));
 
-    public void setInput(ArrayList list) { inputValue = (float)list[0]; }
-    public void setTouch(ArrayList list) {
+    public void SetInput(ArrayList list) => inputValue = (float)list[0];
+    public void SetTouch(ArrayList list) {
         currTime = Time.time;
         if (currTime - prevTime < attackDelay)
             return;
@@ -73,5 +66,4 @@ public class TurretController : MonoBehaviour
         rigidbd.AddForceAtPosition(proj.transform.up.normalized * projectileSpeed, transform.position, ForceMode2D.Impulse);
         prevTime = currTime;
     }
-
 }
