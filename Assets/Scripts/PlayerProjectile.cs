@@ -7,6 +7,7 @@ public class PlayerProjectile : MonoBehaviour
     public GameObject particle;
     public Transform target = null;
     public float homingSpeed;
+    public float lockedOnSpeed = 15;
     Rigidbody2D rb;
     float lerp = 0;
     private void Start()
@@ -37,7 +38,7 @@ public class PlayerProjectile : MonoBehaviour
             var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
             float lerpedAngle = Mathf.LerpAngle(transform.eulerAngles.z, angle + 90, lerp);
             transform.rotation = Quaternion.AngleAxis(lerpedAngle, Vector3.forward);
-            rb.velocity = transform.up.normalized * 15;
+            rb.velocity = transform.up.normalized * lockedOnSpeed;
         }
     }
 }

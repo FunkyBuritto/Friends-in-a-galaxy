@@ -2,12 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
-public class EnemyController : MonoBehaviour
+public class EnemyBase : MonoBehaviour
 {
-    public GameObject player;
+    protected GameObject player;
+    protected Rigidbody2D rb;
+    protected bool boosting = false;
+
+    protected float aimStartTime;
+    protected float rotateLerp = 0;
+
+    public bool isAiming = false, isReloading = false;
+
+    public ParticleSystem ps;
     public GameObject projectile;
     public float projectileSpeed;
+    public float reloadSpeed;
+    public float rotationSpeed;
+    public float movementSpeed;
+    public int Hp = 3;
+
+    public float idleDist = 30;
+    public float attackDist = 12;
+    public float backingDist = 6;
+
     public enum FightState
     {
         Relocating,
@@ -17,27 +34,23 @@ public class EnemyController : MonoBehaviour
         Idle
     }
     public FightState state = FightState.Idle;
-    public float movementSpeed;
-    public bool isAiming = false, isReloading = false;
-    public ParticleSystem ps;
-    public int Hp = 3;
 
-    bool boosting = false;
-    Rigidbody2D rb;
-    
-
+    // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
         rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (boosting && !ps.isPlaying) {
+        if (boosting && !ps.isPlaying)
+        {
             ps.Play();
         }
-        else if (!boosting && ps.isPlaying) {
+        else if (!boosting && ps.isPlaying)
+        {
             ps.Stop();
         }
         switch (state)
@@ -48,8 +61,9 @@ public class EnemyController : MonoBehaviour
                 break;
             case FightState.Aiming:
                 boosting = false;
-                if(!isAiming)
-                StartCoroutine(Aiming());
+                if (!isAiming)
+                    aimStartTime = Time.time;
+                Aiming();
                 break;
             case FightState.Shooting:
                 boosting = false;
@@ -66,41 +80,62 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    void Relocating()
+    public virtual void Relocating()
     {
         float distance = Vector2.Distance(new Vector2(transform.position.x, transform.position.y / 6 * 8), player.transform.position);
-        if (distance > 30){
+        if (distance > idleDist)
+        {
             // maybe return to group
-            state = FightState.Idle;
+            // state = FightState.Idle;
         }
-        else if(distance < 6){
+        else if (distance < backingDist)
+        {
+            // Rotate towards player
+            rotateLerp += Time.deltaTime * rotationSpeed;
+            var dir = transform.position - player.transform.position;
+            var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            float lerpedAngle = Mathf.LerpAngle(transform.eulerAngles.z, angle + 90, rotateLerp);
+            transform.rotation = Quaternion.AngleAxis(lerpedAngle, Vector3.forward);
             // Go away from player
             rb.AddForce((transform.position - player.transform.position).normalized * movementSpeed * Time.deltaTime);
         }
-        else if (distance < 12){
+        else if (distance < attackDist)
+        {
+            rotateLerp = 0;
             state = FightState.Aiming;
         }
-        else if (distance <= 30){
-            // Move towards player
+        else if (distance <= idleDist)
+        {
+            // Rotate towards player
+            rotateLerp += Time.deltaTime * rotationSpeed;
             var dir = transform.position - player.transform.position;
             var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.AngleAxis(angle + 90, Vector3.forward);
+            float lerpedAngle = Mathf.LerpAngle(transform.eulerAngles.z, angle + 90, rotateLerp);
+            transform.rotation = Quaternion.AngleAxis(lerpedAngle, Vector3.forward);
+
+            // Move towards player
             rb.AddForce((transform.position - player.transform.position).normalized * -movementSpeed * Time.deltaTime);
         }
     }
 
-    IEnumerator Aiming()
+    public virtual void Aiming()
     {
         isAiming = true;
+        rotateLerp += Time.deltaTime * rotationSpeed;
         var dir = transform.position - player.transform.position;
         var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(angle + 90, Vector3.forward);
-        yield return new WaitForSeconds(0.5f);
-        isAiming = false;
-        state = FightState.Shooting;
+        float lerpedAngle = Mathf.LerpAngle(transform.eulerAngles.z, angle + 90, rotateLerp);
+        transform.rotation = Quaternion.AngleAxis(lerpedAngle, Vector3.forward);
+
+        if (Time.time - aimStartTime > 0.5f)
+        {
+            isAiming = false;
+            state = FightState.Shooting;
+            rotateLerp = 0;
+        }
     }
-    
-    void Shoot()
+
+    public virtual void Shoot()
     {
         GameObject proj = Instantiate(projectile);
         Rigidbody2D rigidbd = proj.GetComponent<Rigidbody2D>();
@@ -110,20 +145,11 @@ public class EnemyController : MonoBehaviour
         state = FightState.Reloading;
     }
 
-    IEnumerator Reloading()
+    public virtual IEnumerator Reloading()
     {
         isReloading = true;
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(reloadSpeed);
         isReloading = false;
         state = FightState.Relocating;
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Projectile"))
-            Hp--;
-
-        if (Hp <= 0)
-            Destroy(gameObject);
     }
 }
