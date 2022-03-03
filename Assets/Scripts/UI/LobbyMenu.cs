@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityOSC;
 
 public class LobbyMenu : MonoBehaviour
@@ -42,24 +43,56 @@ public class LobbyMenu : MonoBehaviour
         obj.transform.Find("Address").GetComponent<TextMeshProUGUI>().text = user.ip;
 
         // Set the name of the user on the UI:
-        obj.transform.Find("Name").GetComponent<TextMeshProUGUI>().text = index switch
+        obj.transform.Find("Panel").Find("Occupation").GetComponent<TextMeshProUGUI>().text = index switch
         {
             0 => "Driver",
             1 => "Gunner",
-            _ => "Dummy",
+            _ => "Spector",
         };
 
+        // Set the color of the panel on the UI:
+        Color color;
+        switch (index)
+        {
+            case 0: ColorUtility.TryParseHtmlString("FF88DC", out color); break;
+            case 1: ColorUtility.TryParseHtmlString("AD88FF", out color); break;
+            default: ColorUtility.TryParseHtmlString("DDDDDD", out color); break;
+        }
+        obj.transform.Find("Panel").GetComponent<Image>().color = color;
+
+        // Set the color of the text on the UI:
+        Color textColor;
+        switch (index)
+        {
+            case 0: ColorUtility.TryParseHtmlString("FFBDFB", out textColor); break;
+            case 1: ColorUtility.TryParseHtmlString("D5BDFF", out textColor); break;
+            default: ColorUtility.TryParseHtmlString("ECECEC", out textColor); break;
+        }
+        obj.transform.Find("Panel").Find("Occupation").GetComponent<TextMeshProUGUI>().color = textColor;
+
         // Create a cursor for the user.
-        CreateCursor(user.ip);
+        CreateCursor(user.ip, index);
     }
 
     /// <summary>
     /// Create a new cursor for a user.
     /// </summary>
-    private void CreateCursor(string ip)
+    private void CreateCursor(string ip, int index)
     {
+        // Get the color of the cursor on the UI:
+        Color color;
+        switch (index)
+        {
+            case 0: ColorUtility.TryParseHtmlString("FF88DC", out color); break;
+            case 1: ColorUtility.TryParseHtmlString("AD88FF", out color); break;
+            default: ColorUtility.TryParseHtmlString("DDDDDD", out color); break;
+        }
+
+        GameObject cursor = Instantiate(cursorUI, cursorParent);
+        cursor.GetComponent<Image>().color = color;
+
         // Create the cursor object.
-        cursors.Add(new UserCursor(ip, Instantiate(cursorUI, cursorParent), new Vector3(Screen.width / 2.0f, Screen.height / 2.0f)));
+        cursors.Add(new UserCursor(ip, cursor, new Vector3(Screen.width / 2.0f, Screen.height / 2.0f)));
     }
 
     /// <summary>

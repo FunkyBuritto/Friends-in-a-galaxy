@@ -8,17 +8,19 @@ using UnityOSC;
 public class HoverButton : MonoBehaviour
 {
     [SerializeField] private UnityEvent onActivate;
-    [SerializeField] private RectTransform outlineOverlay;
+    [SerializeField] private RectTransform hoverArea;
     [SerializeField] private RectTransform mask;
     private readonly Dictionary<string, bool> cursors = new Dictionary<string, bool>();
     private LobbyMenu menu;
     private bool active;
     private float charge;
+    private float maskWidth;
 
     private void Start()
     {
         OSCHandler.AddGlobalSpecificHook($"/{Constants.UUID}/gravity", LookForHover);
         charge = 0;
+        maskWidth = mask.sizeDelta.x;
     }
 
     private void Update()
@@ -28,7 +30,7 @@ public class HoverButton : MonoBehaviour
         else charge = Mathf.Clamp(charge - Time.deltaTime / 3.0f, 0.0f, Mathf.Infinity);
         if (charge >= 3.0f) onActivate.Invoke();
 
-        mask.GetComponent<Image>().color = Color.Lerp(Color.red, Color.blue, charge / 3.0f);
+        mask.sizeDelta = new Vector2(maskWidth * (1.0f - charge / 3.0f), mask.sizeDelta.y);
     }
 
     /// <summary>
@@ -47,7 +49,7 @@ public class HoverButton : MonoBehaviour
 
             // Get the corners of the button:
             Vector3[] corners = new Vector3[4];
-            mask.GetWorldCorners(corners);
+            hoverArea.GetWorldCorners(corners);
 
             // Match the cursor to the button corners:
             cursors[msg.ip] = cursor.x > corners[0].x && cursor.x < corners[2].x && cursor.y > corners[0].y && cursor.y < corners[1].y;
