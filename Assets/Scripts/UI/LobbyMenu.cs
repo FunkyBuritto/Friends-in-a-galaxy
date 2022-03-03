@@ -54,9 +54,9 @@ public class LobbyMenu : MonoBehaviour
         Color color;
         switch (index)
         {
-            case 0: ColorUtility.TryParseHtmlString("FF88DC", out color); break;
-            case 1: ColorUtility.TryParseHtmlString("AD88FF", out color); break;
-            default: ColorUtility.TryParseHtmlString("DDDDDD", out color); break;
+            case 0: ColorUtility.TryParseHtmlString("#FF88DC", out color); break;
+            case 1: ColorUtility.TryParseHtmlString("#AD88FF", out color); break;
+            default: ColorUtility.TryParseHtmlString("#DDDDDD", out color); break;
         }
         obj.transform.Find("Panel").GetComponent<Image>().color = color;
 
@@ -64,9 +64,9 @@ public class LobbyMenu : MonoBehaviour
         Color textColor;
         switch (index)
         {
-            case 0: ColorUtility.TryParseHtmlString("FFBDFB", out textColor); break;
-            case 1: ColorUtility.TryParseHtmlString("D5BDFF", out textColor); break;
-            default: ColorUtility.TryParseHtmlString("ECECEC", out textColor); break;
+            case 0: ColorUtility.TryParseHtmlString("#FFBDFB", out textColor); break;
+            case 1: ColorUtility.TryParseHtmlString("#D5BDFF", out textColor); break;
+            default: ColorUtility.TryParseHtmlString("#ECECEC", out textColor); break;
         }
         obj.transform.Find("Panel").Find("Occupation").GetComponent<TextMeshProUGUI>().color = textColor;
 
@@ -83,9 +83,9 @@ public class LobbyMenu : MonoBehaviour
         Color color;
         switch (index)
         {
-            case 0: ColorUtility.TryParseHtmlString("FF88DC", out color); break;
-            case 1: ColorUtility.TryParseHtmlString("AD88FF", out color); break;
-            default: ColorUtility.TryParseHtmlString("DDDDDD", out color); break;
+            case 0: ColorUtility.TryParseHtmlString("#FF88DC", out color); break;
+            case 1: ColorUtility.TryParseHtmlString("#AD88FF", out color); break;
+            default: ColorUtility.TryParseHtmlString("#DDDDDD", out color); break;
         }
 
         GameObject cursor = Instantiate(cursorUI, cursorParent);
