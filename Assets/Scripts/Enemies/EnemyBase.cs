@@ -42,6 +42,8 @@ public class EnemyBase : MonoBehaviour
     public float attackDist = 12;
     public float backingDist = 6;
 
+    [HideInInspector] public GameObject spawnObject;
+
     // Start is called before the first frame update
     void Start()
     {

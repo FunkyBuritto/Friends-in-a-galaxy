@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05c4238531971f549be22580d5fd03c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
+  state: 4
   isAiming: 0
   isReloading: 0
   projectile: {fileID: 4542897121676503125, guid: de9c627d944fbc9408e4e364a99ffa21, type: 3}
@@ -111,6 +111,7 @@ MonoBehaviour:
   idleDist: 30
   attackDist: 15
   backingDist: 7
+  spawnObject: {fileID: 0}
 --- !u!50 &195047387205841154
 Rigidbody2D:
   serializedVersion: 4
