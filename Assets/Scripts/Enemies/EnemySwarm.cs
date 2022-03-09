@@ -87,7 +87,6 @@ public class EnemySwarm : MonoBehaviour
                 if (!alarmed)
                     StartCoroutine(alarming());
             } else {
-                
                 Debug.DrawRay(transform.position, player.transform.position - transform.position, Color.red);
             }
 
@@ -110,7 +109,11 @@ public class EnemySwarm : MonoBehaviour
 
     IEnumerator alarming() {
         alarmed = true;
-        foreach (GameObject enemy in enemies) enemy.GetComponent<EnemyBase>().state = EnemyBase.FightState.Relocating;
+        for (int i = 0; i < enemyCount; i++)
+        {
+            if (enemies[i])
+                enemies[i].GetComponent<EnemyBase>().state = EnemyBase.FightState.Relocating;
+        }
         yield return new WaitForSeconds(5f);
         alarmed = false;
     }
