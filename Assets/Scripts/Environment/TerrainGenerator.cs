@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections.Generic;
 using UnityEngine;
 using VoronoiLib;
@@ -22,6 +23,8 @@ public class TerrainGenerator : MonoBehaviour
     [SerializeField] private Gradient terrainGradient;
 
     [Header("Prefabs")]
+    [SerializeField] private GameObject player;
+    [SerializeField] private GameObject swarm;
     [SerializeField] private GameObject[] rocks;
 
     [HideInInspector] public Vector2 seed;
@@ -42,7 +45,15 @@ public class TerrainGenerator : MonoBehaviour
 
         // Create the terrain:
         InstantiateGrid(diagram, portal, portalClearance, terrainRadius, 18.0f, rockDensity);
+
+        // Instantiate the player:
+        InstantiatePlayer(portal, portalClearance);
+
+        // Generate the swarms:
+        GenerateSwarms(diagram, portal, portalClearance);
     }
+
+    #if UNITY_EDITOR
 
     private void OnDrawGizmos()
     {
@@ -59,6 +70,8 @@ public class TerrainGenerator : MonoBehaviour
             }
         }
     }
+
+    #endif
 
     /// <summary>
     /// Generate the voronoi points for the map.
@@ -144,6 +157,60 @@ public class TerrainGenerator : MonoBehaviour
                 rock.GetComponent<SpriteRenderer>().color = TerrainColor(point);
             }
         }
+    }
+
+    /// <summary>
+    /// Instantiate the player into the level.
+    /// </summary>
+    /// <param name="portal">The position of the portal.</param>
+    /// <param name="portal_dist">The distance to the terrain around the portal.</param>
+    private void InstantiatePlayer(Vector2 portal, float portal_dist)
+    {
+        Transform tf = Instantiate(player, portal + (Vector2)Random.onUnitSphere * (portal_dist / 4.0f), Quaternion.identity).transform;
+
+        // Make the camera follow the player.
+        CinemachineVirtualCamera camera = FindObjectOfType<CinemachineVirtualCamera>();
+        camera.transform.position = tf.position;
+        camera.Follow = tf;
+    }
+
+    /// <summary>
+    /// Generate the swarms using the previously generated voronoi diagram.
+    /// </summary>
+    /// <param name="voronoi">The previously generated voronoi diagram.</param>
+    private void GenerateSwarms(LinkedList<VEdge> voronoi, Vector2 portal, float portal_dist)
+    {
+        List<Vector2> swarms = new List<Vector2>();
+        LinkedListNode<VEdge> edge = voronoi.First;
+        while (edge != null && edge.Value != null)
+        {
+            InstantiateSwarm(edge.Value.Start, portal, portal_dist, ref swarms);
+            edge = edge.Next;
+        }
+    }
+
+    /// <summary>
+    /// Instantiate a swarm at a given position.
+    /// </summary>
+    /// <param name="point">The point where it should be instantiated.</param>
+    /// <param name="swarms">The swarm prefab.</param>
+    private void InstantiateSwarm(VPoint point, Vector2 portal, float portal_dist, ref List<Vector2> swarms)
+    {
+        Vector2 pos = (Vector2)point;
+
+        // Check if the swarm isn't too close to the portal.
+        if (Vector2.Distance(pos, portal) < portal_dist) return;
+
+        for (int i = 0; i < swarms.Count; i++)
+        {
+            if (Vector2.Distance(swarms[i], pos) < 5.0f)
+                return; // Exit if this position is already populated.
+        }
+
+        // Create the swarm.
+        GameObject obj = Instantiate(swarm, transform);
+        obj.transform.position = pos;
+        swarms.Add(pos);
     }
 
     /// <summary>
