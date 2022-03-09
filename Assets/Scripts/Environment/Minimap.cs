@@ -121,15 +121,15 @@ public class Minimap : MonoBehaviour
 
             enemy.map_transform.position = ToMapSpace(enemy.world_transform.position);
 
-            if (enemy.type != EnemyTypes.Guardian) return;
+            if (enemy.type != EnemyTypes.Guardian) continue;
 
             // Turn the arrow on and off based on if its on the camera.
             float dist = Vector3.Distance(ShipController.PlayerShip.transform.position, enemy.world_transform.position);
 
-            if (dist >= cameraRadius && enemy.guardian_arrow.gameObject.activeSelf == true)
-                enemy.guardian_arrow.gameObject.SetActive(false);
-            else if (enemy.guardian_arrow.gameObject.activeSelf == false)
+            if (dist >= cameraRadius && enemy.guardian_arrow.gameObject.activeSelf == false)
                 enemy.guardian_arrow.gameObject.SetActive(true);
+            else if (dist < cameraRadius && enemy.guardian_arrow.gameObject.activeSelf == true)
+                enemy.guardian_arrow.gameObject.SetActive(false);
 
             // Rotate the guardian arrows towards the guardians:
             Vector3 dir = ShipController.PlayerShip.transform.position - enemy.world_transform.position;

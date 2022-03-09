@@ -91,6 +91,7 @@ public class EnemyBase : MonoBehaviour
 
     public virtual void Relocating()
     {
+        if (player == null) return;
         float distance = Vector2.Distance(new Vector2(transform.position.x, transform.position.y / 6 * 8), player.transform.position);
         if (distance > idleDist)
         {
