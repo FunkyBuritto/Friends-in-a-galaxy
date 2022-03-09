@@ -4,11 +4,13 @@ using UnityEngine;
 public class Minimap : MonoBehaviour
 {
     [SerializeField] private Camera cam;
+    [SerializeField] private RectTransform UI;
 
     [Header("Config")]
     [SerializeField] private float scaleFactor = 0.175f;
 
     [Header("Prefabs")]
+    [SerializeField] private GameObject arrowUI;
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject[] enemies;
     [SerializeField] private GameObject[] rocks;
@@ -24,6 +26,8 @@ public class Minimap : MonoBehaviour
         public Transform world_transform;
         public Transform map_transform;
         public EnemyTypes type;
+        // Only exists on guardian type enemies.
+        public RectTransform guardian_arrow;
     }
 
     /// <summary>
@@ -69,7 +73,11 @@ public class Minimap : MonoBehaviour
         { 
             world_transform = enemy,
             map_transform = map_enemy,
-            type = type
+            type = type,
+            // Only assign the guardian arrow if this enemy is a guardian.
+            guardian_arrow = type == EnemyTypes.Guardian ? 
+                Instantiate(instance.arrowUI, instance.UI).GetComponent<RectTransform>()
+                : null
         });
     }
 
@@ -86,6 +94,7 @@ public class Minimap : MonoBehaviour
             if (instance.mini_enemies[i].world_transform == enemy)
             {
                 Destroy(instance.mini_enemies[i].map_transform.gameObject);
+                instance.mini_enemies.RemoveAt(i);
                 return;
             }
         }
@@ -108,6 +117,13 @@ public class Minimap : MonoBehaviour
         for (int i = 0; i < mini_enemies.Count; i++)
         {
             mini_enemies[i].map_transform.position = ToMapSpace(mini_enemies[i].world_transform.position);
+
+            if (mini_enemies[i].type != EnemyTypes.Guardian) return;
+
+            // Rotate the guardian arrows towards the guardians:
+            Vector3 dir = ShipController.PlayerShip.transform.position - mini_enemies[i].world_transform.position;
+            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            mini_enemies[i].guardian_arrow.rotation = Quaternion.AngleAxis(angle + 90.0f, Vector3.forward);
         }
     }
 }
