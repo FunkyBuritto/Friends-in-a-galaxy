@@ -21,6 +21,6 @@ public class ShipController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        SpaceBackground.UpdateBackground(tg.TerrainColor(transform.position));
+        //SpaceBackground.UpdateBackground(tg.TerrainColor(transform.position));
     }
 }
