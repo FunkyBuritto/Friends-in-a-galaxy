@@ -8,6 +8,7 @@ public class Minimap : MonoBehaviour
 
     [Header("Config")]
     [SerializeField] private float scaleFactor = 0.175f;
+    [SerializeField] private float cameraRadius = 50.0f;
 
     [Header("Prefabs")]
     [SerializeField] private GameObject arrowUI;
@@ -116,14 +117,24 @@ public class Minimap : MonoBehaviour
         // Update the enemies.
         for (int i = 0; i < mini_enemies.Count; i++)
         {
-            mini_enemies[i].map_transform.position = ToMapSpace(mini_enemies[i].world_transform.position);
+            MinimapEnemy enemy = mini_enemies[i];
 
-            if (mini_enemies[i].type != EnemyTypes.Guardian) return;
+            enemy.map_transform.position = ToMapSpace(enemy.world_transform.position);
+
+            if (enemy.type != EnemyTypes.Guardian) return;
+
+            // Turn the arrow on and off based on if its on the camera.
+            float dist = Vector3.Distance(ShipController.PlayerShip.transform.position, enemy.world_transform.position);
+
+            if (dist >= cameraRadius && enemy.guardian_arrow.gameObject.activeSelf == true)
+                enemy.guardian_arrow.gameObject.SetActive(false);
+            else if (enemy.guardian_arrow.gameObject.activeSelf == false)
+                enemy.guardian_arrow.gameObject.SetActive(true);
 
             // Rotate the guardian arrows towards the guardians:
-            Vector3 dir = ShipController.PlayerShip.transform.position - mini_enemies[i].world_transform.position;
+            Vector3 dir = ShipController.PlayerShip.transform.position - enemy.world_transform.position;
             float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-            mini_enemies[i].guardian_arrow.rotation = Quaternion.AngleAxis(angle + 90.0f, Vector3.forward);
+            enemy.guardian_arrow.rotation = Quaternion.AngleAxis(angle + 90.0f, Vector3.forward);
         }
     }
 }
