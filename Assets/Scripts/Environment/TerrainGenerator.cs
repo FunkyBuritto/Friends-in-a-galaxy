@@ -54,7 +54,7 @@ public class TerrainGenerator : MonoBehaviour
         // Generate the swarms:
         GenerateSwarms(diagram, portal, portalClearance);
 
-        Minimap.instance.Setup();
+        Minimap.Setup(portal);
     }
 
     #if UNITY_EDITOR

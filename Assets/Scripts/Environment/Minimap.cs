@@ -13,6 +13,7 @@ public class Minimap : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField] private GameObject arrowUI;
     [SerializeField] private GameObject player;
+    [SerializeField] private GameObject portal;
     [SerializeField] private GameObject[] enemies;
     [SerializeField] private GameObject[] rocks;
 
@@ -49,14 +50,20 @@ public class Minimap : MonoBehaviour
         rock.rotation = rotation;
     }
 
-    public void Setup()
+    /// <summary>
+    /// Setup the Minimap.
+    /// </summary>
+    public static void Setup(Vector2 portal_pos)
     {
         // Create the minimap player.
-        mini_player = Instantiate(player, transform).transform;
-        mini_player.position = ToMapSpace(ShipController.PlayerShip.transform.position);
-        mini_player.rotation = ShipController.PlayerShip.transform.rotation;
+        instance.mini_player = Instantiate(instance.player, instance.transform).transform;
+        instance.mini_player.position = ToMapSpace(ShipController.PlayerShip.transform.position);
+        instance.mini_player.rotation = ShipController.PlayerShip.transform.rotation;
 
-        isSetup = true;
+        // Create the portal.
+        Instantiate(instance.portal, ToMapSpace(portal_pos), Quaternion.identity);
+
+        instance.isSetup = true;
     }
 
     /// <summary>
