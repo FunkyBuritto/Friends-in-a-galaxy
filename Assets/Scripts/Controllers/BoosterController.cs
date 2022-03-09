@@ -9,6 +9,7 @@ public class BoosterController : MonoBehaviour
     public float boostSpeed;
     public float maxRotation;
     public ParticleSystem ps;
+    public GameObject shield;
 
     float inputValue = 0;
     bool boosting = false;
@@ -47,7 +48,6 @@ public class BoosterController : MonoBehaviour
         {
             ps.Stop();
         }
-            
     }
 
     private void FixedUpdate()
@@ -66,6 +66,7 @@ public class BoosterController : MonoBehaviour
         float angle = value * maxRotation;
         angle = (angle > 180) ? Mathf.Clamp(angle - 360, -maxRotation, maxRotation) : Mathf.Clamp(angle, -maxRotation, maxRotation);
         transform.localRotation = Quaternion.Euler(0, 0, angle);
+        shield.transform.localRotation = Quaternion.Euler(0, 0, -angle);
     }
 
     public void setInput(ArrayList list) { inputValue = (float)list[0]; }
