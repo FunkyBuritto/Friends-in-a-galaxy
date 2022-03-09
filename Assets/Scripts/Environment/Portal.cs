@@ -30,7 +30,6 @@ public class Portal : MonoBehaviour
         // Generate Points
         float angle = 360 / blockPointAmount;
         for (int i = 0; i < (360 * blockLayers); i += (int)angle) {
-            Debug.Log(i);
             linePoints.Add(new Vector3(Mathf.Sin(i * Mathf.PI / 180), Mathf.Cos(i * Mathf.PI / 180), 0) * blockRadius);
         }
 
@@ -47,11 +46,8 @@ public class Portal : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        Debug.Log(hasShield);
-        if (hasShield)
-        {
-            for (int i = 0; i < linePoints.Count; i++)
-            {
+        if (hasShield) {
+            for (int i = 0; i < linePoints.Count; i++) {
                 lr.SetPosition(i, linePoints[i] + Random.insideUnitSphere * blockFreq);
             }
 

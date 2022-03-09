@@ -14,8 +14,10 @@ public class EnemyProjectile : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D coll)
     {
-        if (coll.gameObject.CompareTag("Player"))
+        if (coll.gameObject.CompareTag("Player") && Vector2.Distance(coll.transform.position, coll.otherCollider.transform.position) < 1.9f){
             ShipController.PlayerShip.Hp -= damage;
+        }
+            
 
         Instantiate(particle, transform.position, Quaternion.identity);
         Destroy(gameObject);
