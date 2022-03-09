@@ -19,7 +19,7 @@ public class EliteEnemyController : EnemyBase
         base.Shoot();
     }
 
-    private void Start()
+    private void Awake()
     {
         Minimap.SubscribeEnemy(transform, Minimap.EnemyTypes.Guardian);
     }

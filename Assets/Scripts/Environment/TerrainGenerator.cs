@@ -17,6 +17,8 @@ public class TerrainGenerator : MonoBehaviour
     [SerializeField] private float minDist = 8.0f;
     [Tooltip("Minimum distance around the portal")]
     [SerializeField] private float portalClearance = 100.0f;
+    [Tooltip("The number of guardians to spawn")]
+    [SerializeField] private int guardians = 3;
 
     [Header("Appearence")]
     [SerializeField] private float gradientFrequency = 2.0f;
@@ -29,9 +31,6 @@ public class TerrainGenerator : MonoBehaviour
 
     [HideInInspector] public Vector2 seed;
     private LinkedList<VEdge> diagram;
-
-    List<int> listNumbers = new List<int>();
-    private float eliteCount = 3;
 
     private void Start()
     {
@@ -55,7 +54,7 @@ public class TerrainGenerator : MonoBehaviour
         // Generate the swarms:
         GenerateSwarms(diagram, portal, portalClearance);
 
-        Minimap.instance.Setup();
+        Minimap.Setup(portal);
     }
 
     #if UNITY_EDITOR
@@ -189,55 +188,60 @@ public class TerrainGenerator : MonoBehaviour
     /// <param name="voronoi">The previously generated voronoi diagram.</param>
     private void GenerateSwarms(LinkedList<VEdge> voronoi, Vector2 portal, float portal_dist)
     {
-        // Generate random numbers
-        int number;
-        for (int i = 0; i <= 3; i++)
-        {
-            do {
-                number = (int)Random.Range(0, 50);
-            } while (listNumbers.Contains(number));
-            listNumbers.Add(number);
-        }
-
         List<Vector2> swarms = new List<Vector2>();
         LinkedListNode<VEdge> edge = voronoi.First;
-        int itt = 0;
+
+        // Loop over all the positions and save the cancidates:
         while (edge != null && edge.Value != null)
         {
-            InstantiateSwarm(edge.Value.Start, portal, portal_dist, ref swarms, itt);
+            Vector2 pos = (Vector2)edge.Value.Start;
+            bool isBad = false;
+
+            // Check if the swarm isn't too close to the portal.
+            if (Vector2.Distance(pos, portal) < portal_dist) isBad = true;
+
+            for (int i = 0; i < swarms.Count; i++)
+            {
+                if (Vector2.Distance(swarms[i], pos) < 5.0f)
+                    isBad = true; // Exit if this position is already populated.
+            }
+
+            if (isBad == false) swarms.Add(pos);
+
             edge = edge.Next;
-            itt++;
         }
+
+        // Loop over all candicates and select the guardians:
+        int selected = 0;
+        int max_iter = 1000;
+        List<int> guardianIndices = new List<int>();
+        while (selected < guardians)
+        {
+            int index = Random.Range(0, swarms.Count);
+            if (guardianIndices.Contains(index) == false)
+            {
+                guardianIndices.Add(index);
+                selected++;
+            }
+            max_iter--; if (max_iter < 0) break;
+        }
+
+        // Instantiate all the swarms using the candidates:
+        for (int i = 0; i < swarms.Count; i++)
+            InstantiateSwarm(swarms[i], guardianIndices.Contains(i));
     }
 
     /// <summary>
     /// Instantiate a swarm at a given position.
     /// </summary>
-    /// <param name="point">The point where it should be instantiated.</param>
+    /// <param name="pos">The position where it should be instantiated.</param>
     /// <param name="swarms">The swarm prefab.</param>
-    private void InstantiateSwarm(VPoint point, Vector2 portal, float portal_dist, ref List<Vector2> swarms, int itteration)
+    private void InstantiateSwarm(Vector2 pos, bool hasElite)
     {
-        Vector2 pos = (Vector2)point;
-
-        // Check if the swarm isn't too close to the portal.
-        if (Vector2.Distance(pos, portal) < portal_dist) return;
-
-        for (int i = 0; i < swarms.Count; i++)
-        {
-            if (Vector2.Distance(swarms[i], pos) < 5.0f)
-                return; // Exit if this position is already populated.
-        }
-
         // Create the swarm.
         GameObject obj = Instantiate(swarm, transform);
         obj.transform.position = pos;
-
-        if (listNumbers.Contains(itteration)) {
-            obj.GetComponent<EnemySwarm>().hasElite = true;
-            eliteCount--;
-        }
-
-        swarms.Add(pos);
+        obj.GetComponent<EnemySwarm>().hasElite = hasElite;
     }
 
     /// <summary>
