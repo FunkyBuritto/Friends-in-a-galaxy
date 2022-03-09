@@ -12,6 +12,7 @@ public class Minimap : MonoBehaviour
 
     [Header("Prefabs")]
     [SerializeField] private GameObject arrowUI;
+    [SerializeField] private GameObject portalArrowUI;
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject portal;
     [SerializeField] private GameObject[] enemies;
@@ -20,6 +21,8 @@ public class Minimap : MonoBehaviour
     public static Minimap instance;
     private List<MinimapEnemy> mini_enemies = new List<MinimapEnemy>();
     private Transform mini_player;
+    private Vector2 portal_pos;
+    private RectTransform portal_arrow;
     private bool isSetup = false;
 
     public enum EnemyTypes { Default = 0, Rocket = 1, Guardian = 2 }
@@ -62,6 +65,8 @@ public class Minimap : MonoBehaviour
 
         // Create the portal.
         Instantiate(instance.portal, ToMapSpace(portal_pos), Quaternion.identity);
+        instance.portal_arrow = Instantiate(instance.portalArrowUI, instance.UI).GetComponent<RectTransform>();
+        instance.portal_pos = portal_pos;
 
         instance.isSetup = true;
     }
@@ -142,6 +147,22 @@ public class Minimap : MonoBehaviour
             Vector3 dir = ShipController.PlayerShip.transform.position - enemy.world_transform.position;
             float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
             enemy.guardian_arrow.rotation = Quaternion.AngleAxis(angle + 90.0f, Vector3.forward);
+        }
+
+        // Update portal arrow:
+        if (portal_arrow != null)
+        {
+            // Turn the arrow on and off based on if its on the camera.
+            float dist = Vector3.Distance(ShipController.PlayerShip.transform.position, portal_pos);
+
+            if (dist >= cameraRadius && portal_arrow.gameObject.activeSelf == false)
+                portal_arrow.gameObject.SetActive(true);
+            else if (dist < cameraRadius && portal_arrow.gameObject.activeSelf == true)
+                portal_arrow.gameObject.SetActive(false);
+
+            Vector3 dir = ShipController.PlayerShip.transform.position - (Vector3)portal_pos;
+            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            portal_arrow.rotation = Quaternion.AngleAxis(angle + 90.0f, Vector3.forward);
         }
     }
 }
