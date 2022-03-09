@@ -19,6 +19,8 @@ public class SpaceBackground : MonoBehaviour
     /// <param name="color">The color to match.</param>
     public static void UpdateBackground(Color color)
     {
+        if (instance == null) return;
+
         Background match = instance.backgrounds.FirstOrDefault(b => new Vector3(Mathf.RoundToInt(color.r * 10.0f), Mathf.RoundToInt(color.g * 10.0f), Mathf.RoundToInt(color.b * 10.0f)) == new Vector3(Mathf.RoundToInt(b.color.r * 10.0f), Mathf.RoundToInt(b.color.g * 10.0f), Mathf.RoundToInt(b.color.b * 10.0f)));
         if (match.obj != null)
         {
