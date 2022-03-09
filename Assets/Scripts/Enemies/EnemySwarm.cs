@@ -16,6 +16,8 @@ public class EnemySwarm : MonoBehaviour
     [Tooltip("0 = only basic enemies, 1 = only rocket enemies")]
     [Range(0f, 1f)] public float enemyRatio;
 
+    public bool hasElite = false;
+
     private GameObject player;
     private List<GameObject> spawnPositions = new List<GameObject>();
     private List<GameObject> enemies = new List<GameObject>();
@@ -74,6 +76,12 @@ public class EnemySwarm : MonoBehaviour
 
             enemies[0].GetComponent<EnemyBase>().spawnObject = spawnPoint;
             enemies[0].transform.rotation = new Quaternion(0,0, Random.Range(0, Mathf.PI * 2), 1);
+        }
+
+        if (hasElite) {
+            Destroy(enemies[0]);
+            enemies.RemoveAt(0);
+            enemies.Insert(0, Instantiate(eliteEnemy, spawnPositions[0].transform.position, Quaternion.identity));
         }
     }
 

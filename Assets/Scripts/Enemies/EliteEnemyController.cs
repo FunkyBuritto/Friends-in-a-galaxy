@@ -38,7 +38,10 @@ public class EliteEnemyController : EnemyBase
         if (collision.gameObject.CompareTag("Projectile"))
             Hp--;
 
-        if (Hp <= 0)
+        if (Hp <= 0) {
+            Portal.portal.eliteCount--;
             Destroy(gameObject);
+        }
+            
     }
 }
