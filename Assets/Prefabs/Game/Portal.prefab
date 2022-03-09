@@ -4838,9 +4838,10 @@ MonoBehaviour:
   linePoints: []
   pullPower: 6
   blockRadius: 9
-  blockPointAmount: 18
+  blockPointAmount: 36
   blockFreq: 0.3
-  eliteCount: 1
+  blockLayers: 3
+  eliteCount: 3
   hasShield: 1
   shield: {fileID: 958886622053964779}
 --- !u!1 &958886622053964779

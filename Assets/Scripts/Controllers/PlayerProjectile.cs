@@ -13,7 +13,7 @@ public class PlayerProjectile : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        StartCoroutine(DestroyAfter(10f));
+        StartCoroutine(DestroyAfter(1.8f));
     }
 
     private void OnCollisionEnter2D(Collision2D coll)

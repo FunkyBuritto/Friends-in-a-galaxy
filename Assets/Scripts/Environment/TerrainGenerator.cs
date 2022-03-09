@@ -30,6 +30,9 @@ public class TerrainGenerator : MonoBehaviour
     [HideInInspector] public Vector2 seed;
     private LinkedList<VEdge> diagram;
 
+    List<int> listNumbers = new List<int>();
+    private float eliteCount = 3;
+
     private void Start()
     {
         seed = new Vector2(Random.Range(0.0f, 256.0f), Random.Range(0.0f, 256.0f));
@@ -186,12 +189,24 @@ public class TerrainGenerator : MonoBehaviour
     /// <param name="voronoi">The previously generated voronoi diagram.</param>
     private void GenerateSwarms(LinkedList<VEdge> voronoi, Vector2 portal, float portal_dist)
     {
+        // Generate random numbers
+        int number;
+        for (int i = 0; i <= 3; i++)
+        {
+            do {
+                number = (int)Random.Range(0, 50);
+            } while (listNumbers.Contains(number));
+            listNumbers.Add(number);
+        }
+
         List<Vector2> swarms = new List<Vector2>();
         LinkedListNode<VEdge> edge = voronoi.First;
+        int itt = 0;
         while (edge != null && edge.Value != null)
         {
-            InstantiateSwarm(edge.Value.Start, portal, portal_dist, ref swarms);
+            InstantiateSwarm(edge.Value.Start, portal, portal_dist, ref swarms, itt);
             edge = edge.Next;
+            itt++;
         }
     }
 
@@ -200,7 +215,7 @@ public class TerrainGenerator : MonoBehaviour
     /// </summary>
     /// <param name="point">The point where it should be instantiated.</param>
     /// <param name="swarms">The swarm prefab.</param>
-    private void InstantiateSwarm(VPoint point, Vector2 portal, float portal_dist, ref List<Vector2> swarms)
+    private void InstantiateSwarm(VPoint point, Vector2 portal, float portal_dist, ref List<Vector2> swarms, int itteration)
     {
         Vector2 pos = (Vector2)point;
 
@@ -216,6 +231,12 @@ public class TerrainGenerator : MonoBehaviour
         // Create the swarm.
         GameObject obj = Instantiate(swarm, transform);
         obj.transform.position = pos;
+
+        if (listNumbers.Contains(itteration)) {
+            obj.GetComponent<EnemySwarm>().hasElite = true;
+            eliteCount--;
+        }
+
         swarms.Add(pos);
     }
 
