@@ -5359,7 +5359,7 @@ GameObject:
   - component: {fileID: 6130215826409739353}
   m_Layer: 6
   m_Name: Object
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5470,9 +5470,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2341604614488142996}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Shield
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -11,7 +11,6 @@ public class EnemyBase : MonoBehaviour
     protected float aimStartTime;
     protected float rotateLerp = 0;
 
-    
     public enum FightState
     {
         Relocating,
@@ -91,7 +90,7 @@ public class EnemyBase : MonoBehaviour
 
     public virtual void Relocating()
     {
-        float distance = Vector2.Distance(new Vector2(transform.position.x, transform.position.y / 6 * 8), player.transform.position);
+        float distance = Vector2.Distance(new Vector2(transform.position.x, transform.position.y), player.transform.position);
         if (distance > idleDist)
         {
             // maybe return to group
