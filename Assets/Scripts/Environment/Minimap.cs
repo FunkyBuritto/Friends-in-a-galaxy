@@ -54,8 +54,15 @@ public class Minimap : MonoBehaviour
         isSetup = true;
     }
 
+    /// <summary>
+    /// Subscribe an enemy to the minimap.
+    /// </summary>
+    /// <param name="enemy">The transform of the enemy.</param>
+    /// <param name="type">The type of the enemy.</param>
     public static void SubscribeEnemy(Transform enemy, EnemyTypes type)
     {
+        if (instance == null) return;
+
         Transform map_enemy = Instantiate(instance.enemies[(int)type], instance.transform).transform;
 
         instance.mini_enemies.Add(new MinimapEnemy() 
@@ -66,8 +73,14 @@ public class Minimap : MonoBehaviour
         });
     }
 
+    /// <summary>
+    /// Unsubscribe an enemy from the minimap.
+    /// </summary>
+    /// <param name="enemy">The enemy transform.</param>
     public static void UnsubscribeEnemy(Transform enemy)
     {
+        if (instance == null) return;
+
         for (int i = 0; i < instance.mini_enemies.Count; i++)
         {
             if (instance.mini_enemies[i].world_transform == enemy)
