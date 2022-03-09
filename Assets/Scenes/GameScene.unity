@@ -190,6 +190,7 @@ MonoBehaviour:
     m_NumColorKeys: 3
     m_NumAlphaKeys: 2
   player: {fileID: 407807133421823784, guid: a8189f57f98da4840be1910630348797, type: 3}
+  portal: {fileID: 958886620677610104, guid: 5dd27b5ad190c7549ac59ee52331a677, type: 3}
   swarm: {fileID: 4777800294067046465, guid: b6271f40405412442bb13674c21040ff, type: 3}
   rocks:
   - {fileID: 4113854652928449594, guid: 5e806d2b07ece3a4f9fff2cb024ff21f, type: 3}

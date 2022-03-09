@@ -26,6 +26,7 @@ public class TerrainGenerator : MonoBehaviour
 
     [Header("Prefabs")]
     [SerializeField] private GameObject player;
+    [SerializeField] private GameObject portal;
     [SerializeField] private GameObject swarm;
     [SerializeField] private GameObject[] rocks;
 
@@ -53,6 +54,9 @@ public class TerrainGenerator : MonoBehaviour
 
         // Generate the swarms:
         GenerateSwarms(diagram, portal, portalClearance);
+
+        GameObject obj = Instantiate(this.portal, transform);
+        obj.transform.position = portal;
 
         Minimap.Setup(portal);
     }
