@@ -35,11 +35,9 @@ public class EliteEnemyController : EnemyBase
         {
             GameObject shield = collision.otherCollider.gameObject;
             LeanTween.alpha(shield, 1, 0.15f).setOnComplete(() => LeanTween.alpha(shield, 0.6862f, 0.05f));
-
             return;
         }
             
-
         if (collision.gameObject.CompareTag("Projectile"))
             Hp--;
 
@@ -47,7 +45,6 @@ public class EliteEnemyController : EnemyBase
             Minimap.UnsubscribeEnemy(transform);
             Portal.portal.eliteCount--;
             Destroy(gameObject);
-        }
-            
+        }      
     }
 }

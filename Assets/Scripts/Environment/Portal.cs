@@ -11,6 +11,7 @@ public class Portal : MonoBehaviour
     public float blockRadius;
     public int blockPointAmount;
     public float blockFreq;
+    public int blockLayers = 1;
     public int eliteCount = 3;
 
     public bool hasShield = true;
@@ -28,11 +29,12 @@ public class Portal : MonoBehaviour
 
         // Generate Points
         float angle = 360 / blockPointAmount;
-        for (int i = 0; i < 360; i += (int)angle) {
+        for (int i = 0; i < (360 * blockLayers); i += (int)angle) {
+            Debug.Log(i);
             linePoints.Add(new Vector3(Mathf.Sin(i * Mathf.PI / 180), Mathf.Cos(i * Mathf.PI / 180), 0) * blockRadius);
         }
 
-        lr.positionCount = blockPointAmount;
+        lr.positionCount = blockPointAmount * blockLayers;
         lr.SetPositions(linePoints.ToArray());
     }
 
@@ -50,7 +52,6 @@ public class Portal : MonoBehaviour
         {
             for (int i = 0; i < linePoints.Count; i++)
             {
-                Debug.Log("changing");
                 lr.SetPosition(i, linePoints[i] + Random.insideUnitSphere * blockFreq);
             }
 
