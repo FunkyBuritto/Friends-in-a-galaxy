@@ -46,7 +46,8 @@ MonoBehaviour:
   basicEnemy: {fileID: 788288237738360850, guid: 55cae5e355d7ea04e9293b8fe6121e83, type: 3}
   rocketEnemy: {fileID: 195047387205841166, guid: 3637247bb9b82454b856d667c33d1cda, type: 3}
   eliteEnemy: {fileID: 4012803762755910318, guid: 23471765d13bbde4b97f6f7fe4e67d61, type: 3}
-  spawnRadius: 8
+  spawnRadius: 6
   enemyDistance: 3.5
-  enemyCount: 8
-  enemyRatio: 0.25
+  enemyCount: 4
+  enemyRatio: 0.2
+  hasElite: 0

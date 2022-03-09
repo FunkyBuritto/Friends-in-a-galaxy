@@ -8,5 +8,5 @@
     /// <summary>
     /// The Game Scene name.
     /// </summary>
-    public const string GAMESCENE = "SampleScene";
+    public const string GAMESCENE = "GameScene";
 }
