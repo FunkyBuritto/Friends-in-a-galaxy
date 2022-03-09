@@ -37,12 +37,20 @@ public class RocketEnemyController : EnemyBase
         yield return base.Reloading();
     }
 
+    private void Start()
+    {
+        Minimap.SubscribeEnemy(transform, Minimap.EnemyTypes.Rocket);
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Projectile"))
             Hp--;
 
         if (Hp <= 0)
+        {
+            Minimap.UnsubscribeEnemy(transform);
             Destroy(gameObject);
+        }
     }
 }

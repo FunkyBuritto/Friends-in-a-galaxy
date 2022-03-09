@@ -11,7 +11,7 @@ public class ShipController : MonoBehaviour
     public delegate void HitEventHandler(int old_hp, int new_hp);
     public event HitEventHandler OnHit;
 
-    private void Start()
+    private void Awake()
     {
         PlayerShip = this;
         tg = FindObjectOfType<TerrainGenerator>();
@@ -21,6 +21,6 @@ public class ShipController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //SpaceBackground.UpdateBackground(tg.TerrainColor(transform.position));
+        SpaceBackground.UpdateBackground(tg.TerrainColor(transform.position));
     }
 }

@@ -19,6 +19,11 @@ public class EliteEnemyController : EnemyBase
         base.Shoot();
     }
 
+    private void Start()
+    {
+        Minimap.SubscribeEnemy(transform, Minimap.EnemyTypes.Guardian);
+    }
+
     public override IEnumerator Reloading()
     {
         yield return base.Reloading();
@@ -39,6 +44,7 @@ public class EliteEnemyController : EnemyBase
             Hp--;
 
         if (Hp <= 0) {
+            Minimap.UnsubscribeEnemy(transform);
             Portal.portal.eliteCount--;
             Destroy(gameObject);
         }

@@ -51,6 +51,8 @@ public class TerrainGenerator : MonoBehaviour
 
         // Generate the swarms:
         GenerateSwarms(diagram, portal, portalClearance);
+
+        Minimap.instance.Setup();
     }
 
     #if UNITY_EDITOR
@@ -149,12 +151,16 @@ public class TerrainGenerator : MonoBehaviour
                 if (tooClose) continue;
 
                 // Create the random rock.
-                Transform rock = Instantiate(rocks[Random.Range(0, rocks.Length)], transform).transform;
+                int index = Random.Range(0, rocks.Length);
+                Transform rock = Instantiate(rocks[index], transform).transform;
                 rock.position = point;
-                rock.rotation = Quaternion.Euler(0, 0, Random.Range(0.0f, 360.0f));
+                Quaternion rotation = Quaternion.Euler(0, 0, Random.Range(0.0f, 360.0f));
+                rock.rotation = rotation;
                 rock.gameObject.name = "Rock";
-
                 rock.GetComponent<SpriteRenderer>().color = TerrainColor(point);
+
+                // Add the rock to the minimap.
+                Minimap.AddRock(point, rotation, index);
             }
         }
     }
