@@ -44,13 +44,15 @@ public class RocketEnemyController : EnemyBase
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Projectile"))
+        if (collision.gameObject.CompareTag("Projectile") && Vector2.Distance(collision.transform.position, collision.otherCollider.transform.position) < 1.925f)
             Hp--;
 
         if (Hp <= 0)
         {
             if (Random.Range(0f, 100f) < dropChance)
                 Instantiate(upgrade, transform.position, Quaternion.identity);
+
+            Instantiate(deathParticle, transform.position, Quaternion.identity);
             Minimap.UnsubscribeEnemy(transform);
             Destroy(gameObject);
         }

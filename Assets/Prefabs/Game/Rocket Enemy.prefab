@@ -54,7 +54,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -114,6 +114,7 @@ MonoBehaviour:
   spawnObject: {fileID: 0}
   dropChance: 20
   upgrade: {fileID: 8536305991777099668, guid: 0f6ef26ac6675e34ea2305ac86de8fa6, type: 3}
+  deathParticle: {fileID: 1933248925534348162, guid: c347fdc4485945b4e9a0eecdb005e2e6, type: 3}
 --- !u!50 &195047387205841154
 Rigidbody2D:
   serializedVersion: 4

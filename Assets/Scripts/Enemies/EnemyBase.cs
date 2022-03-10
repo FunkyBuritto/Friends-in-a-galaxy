@@ -47,6 +47,9 @@ public class EnemyBase : MonoBehaviour
     [Range(0f, 100f)] public float dropChance;
     public GameObject upgrade;
 
+    public GameObject deathParticle;
+
+
     // Start is called before the first frame update
     void Awake()
     {
