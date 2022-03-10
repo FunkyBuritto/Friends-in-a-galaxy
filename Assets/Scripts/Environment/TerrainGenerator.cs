@@ -178,7 +178,7 @@ public class TerrainGenerator : MonoBehaviour
     /// <param name="portal_dist">The distance to the terrain around the portal.</param>
     private void InstantiatePlayer(Vector2 portal, float portal_dist)
     {
-        Transform tf = Instantiate(player, portal + (Vector2)Random.onUnitSphere * (portal_dist / 3.0f), Quaternion.identity).transform;
+        Transform tf = Instantiate(player, portal + Random.insideUnitCircle.normalized * (portal_dist / 3.0f), Quaternion.identity).transform;
 
         // Make the camera follow the player.
         CinemachineVirtualCamera camera = GameObject.FindWithTag("PlayerCam").GetComponent<CinemachineVirtualCamera>();
