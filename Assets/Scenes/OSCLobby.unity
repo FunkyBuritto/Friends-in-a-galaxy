@@ -892,7 +892,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serverPort: 80
-  serverIP: 192.168.68.68
+  serverIP: 192.168.20.114
   clientPort: 80
 --- !u!114 &1093792583
 MonoBehaviour:

@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityOSC;
@@ -9,13 +11,12 @@ public class LobbyManager : MonoBehaviour
     public static LobbyManager instance;
 
     /// <summary> List of the connected users. </summary>
-    [SerializeField] public List<OSCUser> users = new List<OSCUser>();
-    private List<Coroutine> timers = new List<Coroutine>();
+    [SerializeField] public Dictionary<GUID, OSCUser> users = new Dictionary<GUID, OSCUser>();
 
     /// Events
-    public delegate void ConnectionEvent(OSCUser user, int index);
+    public delegate void ConnectionEvent(OSCUser user);
     public event ConnectionEvent OnConnection;
-    public delegate void DisconnectEvent(int index, string ip);
+    public delegate void DisconnectEvent(OSCUser user);
     public event DisconnectEvent OnDisconnect;
 
     private void Awake()
@@ -51,7 +52,7 @@ public class LobbyManager : MonoBehaviour
     {
         // If the user is new call on connect.
         if (UserExists(msg.ip) == false) OnConnect(msg.ip);
-        else ResetTimeout(users.Find(u => u.ip == msg.ip));
+        else ResetTimeout(users.Values.First(u => u.ip == msg.ip));
     }
 
     /// <summary>
@@ -59,9 +60,15 @@ public class LobbyManager : MonoBehaviour
     /// </summary>
     private void OnConnect(string ip)
     {
-        users.Add(new OSCUser(ip));
-        timers.Add(StartCoroutine(Timeout(users[users.Count - 1])));
-        if (OnConnection != null) OnConnection.Invoke(users[users.Count - 1], users.Count - 1);
+        UserRole role;
+        if (users.Count == 0 || users.Values.Any(u => u.role != UserRole.Driver)) role = UserRole.Driver;
+        else if (users.Values.Any(u => u.role != UserRole.Gunner)) role = UserRole.Gunner;
+        else role = UserRole.Spectator;
+
+        OSCUser user = new OSCUser(ip, role);
+        users.Add(user.id, user);
+        user.timeout = StartCoroutine(Timeout(user));
+        if (OnConnection != null) OnConnection.Invoke(user);
     }
 
     /// <summary>
@@ -71,9 +78,7 @@ public class LobbyManager : MonoBehaviour
     /// <returns>If the user already exists on the network.</returns>
     private bool UserExists(string ip)
     {
-        for (int i = 0; i < users.Count; i++)
-            if (users[i].ip == ip) return true;
-        return false;
+        return users.Values.Any(u => u.ip == ip);
     }
 
     /// <summary>
@@ -82,10 +87,9 @@ public class LobbyManager : MonoBehaviour
     /// <param name="user">The user object.</param>
     public void RemoveUser(OSCUser user)
     {
-        if (OnDisconnect != null) OnDisconnect.Invoke(users.IndexOf(user), user.ip);
+        if (OnDisconnect != null) OnDisconnect.Invoke(user);
         Debug.LogWarning($"{user.ip} Disconnected!");
-        timers.RemoveAt(users.IndexOf(user));
-        users.Remove(user);
+        users.Remove(user.id);
     }
 
     /// <summary>
@@ -93,9 +97,8 @@ public class LobbyManager : MonoBehaviour
     /// </summary>
     public void ResetTimeout(OSCUser user)
     {
-        int index = users.IndexOf(user);
-        StopCoroutine(timers[index]);
-        timers[index] = StartCoroutine(Timeout(user));
+        StopCoroutine(user.timeout);
+        user.timeout = StartCoroutine(Timeout(user));
     }
 
     private IEnumerator Timeout(OSCUser user)

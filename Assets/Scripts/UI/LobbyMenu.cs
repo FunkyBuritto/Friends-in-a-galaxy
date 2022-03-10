@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,6 +15,7 @@ public class LobbyMenu : MonoBehaviour
     [SerializeField] private RectTransform cursorParent;
     [SerializeField] private GameObject cursorUI;
     [HideInInspector] public readonly List<UserCursor> cursors = new List<UserCursor>();
+    private Dictionary<GUID, GameObject> users = new Dictionary<GUID, GameObject>();
 
     private void Start()
     {
@@ -35,57 +38,57 @@ public class LobbyMenu : MonoBehaviour
     /// Called once a user connects to the OSC server.
     /// </summary>
     /// <param name="addr">The user ip address</param>
-    /// <param name="index">The user index within the user list</param>
-    private void OnConnection(OSCUser user, int index)
+    private void OnConnection(OSCUser user)
     {
         GameObject obj = Instantiate(userUI, usersGrid);
+        users.Add(user.id, obj);
 
         // Set the address of the user on the UI.
         obj.transform.Find("Address").GetComponent<TextMeshProUGUI>().text = user.ip;
 
         // Set the name of the user on the UI:
-        obj.transform.Find("Panel").Find("Occupation").GetComponent<TextMeshProUGUI>().text = index switch
+        obj.transform.Find("Panel").Find("Occupation").GetComponent<TextMeshProUGUI>().text = user.role switch
         {
-            0 => "Driver",
-            1 => "Gunner",
+            UserRole.Driver => "Driver",
+            UserRole.Gunner => "Gunner",
             _ => "Spector",
         };
 
         // Set the color of the panel on the UI:
         Color color;
-        switch (index)
+        switch (user.role)
         {
-            case 0: ColorUtility.TryParseHtmlString("#FF88DC", out color); break;
-            case 1: ColorUtility.TryParseHtmlString("#AD88FF", out color); break;
+            case UserRole.Driver: ColorUtility.TryParseHtmlString("#FF88DC", out color); break;
+            case UserRole.Gunner: ColorUtility.TryParseHtmlString("#AD88FF", out color); break;
             default: ColorUtility.TryParseHtmlString("#DDDDDD", out color); break;
         }
         obj.transform.Find("Panel").GetComponent<Image>().color = color;
 
         // Set the color of the text on the UI:
         Color textColor;
-        switch (index)
+        switch (user.role)
         {
-            case 0: ColorUtility.TryParseHtmlString("#FFBDFB", out textColor); break;
-            case 1: ColorUtility.TryParseHtmlString("#D5BDFF", out textColor); break;
+            case UserRole.Driver: ColorUtility.TryParseHtmlString("#FFBDFB", out textColor); break;
+            case UserRole.Gunner: ColorUtility.TryParseHtmlString("#D5BDFF", out textColor); break;
             default: ColorUtility.TryParseHtmlString("#ECECEC", out textColor); break;
         }
         obj.transform.Find("Panel").Find("Occupation").GetComponent<TextMeshProUGUI>().color = textColor;
 
         // Create a cursor for the user.
-        CreateCursor(user.ip, index);
+        CreateCursor(user);
     }
 
     /// <summary>
     /// Create a new cursor for a user.
     /// </summary>
-    private void CreateCursor(string ip, int index)
+    private void CreateCursor(OSCUser user)
     {
         // Get the color of the cursor on the UI:
         Color color;
-        switch (index)
+        switch (user.role)
         {
-            case 0: ColorUtility.TryParseHtmlString("#FF88DC", out color); break;
-            case 1: ColorUtility.TryParseHtmlString("#AD88FF", out color); break;
+            case UserRole.Driver: ColorUtility.TryParseHtmlString("#FF88DC", out color); break;
+            case UserRole.Gunner: ColorUtility.TryParseHtmlString("#AD88FF", out color); break;
             default: ColorUtility.TryParseHtmlString("#DDDDDD", out color); break;
         }
 
@@ -93,7 +96,7 @@ public class LobbyMenu : MonoBehaviour
         cursor.GetComponent<Image>().color = color;
 
         // Create the cursor object.
-        cursors.Add(new UserCursor(ip, cursor, new Vector3(Screen.width / 2.0f, Screen.height / 2.0f)));
+        cursors.Add(new UserCursor(user.id, cursor, new Vector3(Screen.width / 2.0f, Screen.height / 2.0f)));
     }
 
     /// <summary>
@@ -103,8 +106,10 @@ public class LobbyMenu : MonoBehaviour
     /// <param name="ip">The ip of this user</param>
     private void OnCursor(ArrayList data, string ip)
     {
+        OSCUser user = LobbyManager.instance.users.Values.First(u => u.ip == ip);
+
         // Check if this cursor still exists.
-        if (cursors.Exists(c => c.ip == ip) == false) return;
+        if (cursors.Exists(c => c.id == user.id) == false) return;
 
         float h = -(float)data[0];
         float v = -(float)data[1];
@@ -115,7 +120,7 @@ public class LobbyMenu : MonoBehaviour
         float height = Screen.height * 1.5f;
         float sv = Mathf.Clamp(height * v + height / 2.0f, 30, Screen.height - 30);
 
-        cursors.Find(c => c.ip == ip).pos = new Vector3(sh, sv);
+        cursors.Find(c => c.id == user.id).pos = new Vector3(sh, sv);
     }
 
     /// <summary>
@@ -123,19 +128,22 @@ public class LobbyMenu : MonoBehaviour
     /// </summary>
     private void DestroyCursor(string ip)
     {
-        Destroy(cursors.Find(c => c.ip == ip).instance);
-        cursors.Remove(cursors.Find(c => c.ip == ip));
+        OSCUser user = LobbyManager.instance.users.Values.First(u => u.ip == ip);
+
+        Destroy(cursors.Find(c => c.id == user.id).instance);
+        cursors.Remove(cursors.Find(c => c.id == user.id));
     }
 
     /// <summary>
     /// Called once a user disconnects from the OSC server.
     /// </summary>
-    private void OnDisconnect(int index, string ip)
+    private void OnDisconnect(OSCUser user)
     {
         if (SceneManager.GetActiveScene().name != Constants.GAMESCENE)
         {
-            DestroyCursor(ip);
-            Destroy(usersGrid.GetChild(index).gameObject);
+            DestroyCursor(user.ip);
+            Destroy(users[user.id]);
+            users.Remove(user.id);
         }
     }
 }

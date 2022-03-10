@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace UnityOSC
@@ -7,13 +8,13 @@ namespace UnityOSC
     public class UserCursor
     {
         // Ip address of this user.
-        public string ip;
+        public GUID id;
         public Vector3 pos;
         public GameObject instance;
 
-        public UserCursor(string ip, GameObject obj, Vector3 origin)
+        public UserCursor(GUID id, GameObject obj, Vector3 origin)
         {
-            this.ip = ip;
+            this.id = id;
             instance = obj;
             pos = origin;
         }

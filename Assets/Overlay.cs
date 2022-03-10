@@ -12,8 +12,8 @@ public class Overlay : MonoBehaviour
     private void Start()
     {
         StartCoroutine(nameof(IntroSequence));
-        //LobbyManager.instance.OnDisconnect += (_, __) => OnDisconnect();
-        //LobbyManager.instance.OnConnection += OnConnect;
+        LobbyManager.instance.OnDisconnect += (_) => OnDisconnect();
+        LobbyManager.instance.OnConnection += OnConnect;
     }
 
     IEnumerator IntroSequence()
@@ -31,7 +31,7 @@ public class Overlay : MonoBehaviour
         isBlocking = true;
     }
 
-    private void OnConnect(OSCUser user, int index)
+    private void OnConnect(OSCUser user)
     {
         if (LobbyManager.instance.users.Count >= 2)
         {
