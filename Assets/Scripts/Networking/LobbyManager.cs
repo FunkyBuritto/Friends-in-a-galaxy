@@ -87,6 +87,7 @@ public class LobbyManager : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         if (OnDisconnect != null) OnDisconnect.Invoke(users.IndexOf(user), user.ip);
+        Debug.LogWarning($"{user.ip} timeout!");
         users.Remove(user); // Remove the user once they time out.
     }
 }

@@ -106,12 +106,12 @@ public class EnemySwarm : MonoBehaviour
     }
 
     void EnableEnemies() {
-        foreach (GameObject enemy in enemies) enemy.SetActive(true);
+        foreach (GameObject enemy in enemies) if (enemy != null) enemy.SetActive(true);
         enemiesEnabled = true;
     }
 
     void DisableEnemies() {
-        foreach (GameObject enemy in enemies) enemy.SetActive(false);
+        foreach (GameObject enemy in enemies) if (enemy != null) enemy.SetActive(false);
         enemiesEnabled = false;
     }
 
