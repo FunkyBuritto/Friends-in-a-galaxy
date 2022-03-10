@@ -46,12 +46,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e66a6c1b127179f4a975756da9d7cd39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useKeyboard: 0
+  useKeyboard: 1
   rotationSpeed: 75
   shootPoint: {fileID: 407807133430898512}
   attackDelay: 0.35
   projectileSpeed: 5
   projectile: {fileID: 4542897121676503125, guid: 1523f919d8020364f81b1a97e3ad735b, type: 3}
+  addedUser: 0
 --- !u!1 &407807132376839460
 GameObject:
   m_ObjectHideFlags: 0
@@ -5340,11 +5341,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a34cc3592e2da114083023c1729985c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useKeyboard: 0
+  useKeyboard: 1
   boostSpeed: 4
   maxRotation: 50
   ps: {fileID: 407807132835928038}
   shield: {fileID: 7179608085360361035}
+  addedUser: 0
 --- !u!1 &1779783555143709912
 GameObject:
   m_ObjectHideFlags: 0

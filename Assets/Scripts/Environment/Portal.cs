@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,12 +20,14 @@ public class Portal : MonoBehaviour
     private Rigidbody2D playerRB;
     private GameObject player;
     private LineRenderer lr;
+    private CinemachineVirtualCamera cam;
     public GameObject shield;
 
     // Start is called before the first frame update
     void Start()
     {
         portal = this;
+        cam = GameObject.FindWithTag("PortalCam").GetComponent<CinemachineVirtualCamera>();
         lr = GetComponentInChildren<LineRenderer>();
 
         // Generate Points
@@ -40,7 +43,19 @@ public class Portal : MonoBehaviour
     public void DisableShield()
     {
         shield.SetActive(false);
-        hasShield = false;
+        if (hasShield == true)
+        {
+            hasShield = false;
+            StartCoroutine(nameof(DisableShieldCutScene));
+        }
+    }
+
+    IEnumerator DisableShieldCutScene()
+    {
+        cam.ForceCameraPosition(new Vector3(transform.position.x, transform.position.y, -10), Quaternion.identity);
+        cam.Priority = 11;
+        yield return new WaitForSeconds(4.0f);
+        cam.Priority = 9;
     }
 
     // Update is called once per frame
