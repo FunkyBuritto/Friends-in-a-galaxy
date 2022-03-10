@@ -54,7 +54,7 @@ public class HoverButton : MonoBehaviour
             cursors[msg.ip] = cursor.x > corners[0].x && cursor.x < corners[2].x && cursor.y > corners[0].y && cursor.y < corners[1].y;
 
             // Check if all cursors are over the button:
-            active = cursors.Values.All(c => c);
+            active = cursors.Values.All(c => c) && cursors.Values.Count >= 2;
         }
         else if (cursors.ContainsKey(msg.ip) == true) cursors.Remove(msg.ip);
     }

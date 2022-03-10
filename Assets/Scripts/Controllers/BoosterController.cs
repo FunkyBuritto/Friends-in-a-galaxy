@@ -13,7 +13,7 @@ public class BoosterController : MonoBehaviour
 
     float inputValue = 0;
     bool boosting = false;
-    bool addedUser = false;
+    [HideInInspector] public bool addedUser = false;
 
     float prevTouchTime;
 
@@ -29,6 +29,8 @@ public class BoosterController : MonoBehaviour
 
     void Update()
     {
+        if (Overlay.isBlocking) return;
+
         if (useKeyboard) {
             boostSpeed = 0.1f;
             inputValue = Input.GetAxis("Horizontal");
@@ -52,6 +54,8 @@ public class BoosterController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (Overlay.isBlocking) return;
+
         if (boosting && useKeyboard) {
             shipBody.AddForceAtPosition(transform.up.normalized * boostSpeed, spriteTransform.position, ForceMode2D.Impulse);
         }

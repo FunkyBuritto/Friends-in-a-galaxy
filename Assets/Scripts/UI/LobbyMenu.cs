@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityOSC;
 
@@ -131,7 +132,10 @@ public class LobbyMenu : MonoBehaviour
     /// </summary>
     private void OnDisconnect(int index, string ip)
     {
-        DestroyCursor(ip);
-        Destroy(usersGrid.GetChild(index).gameObject);
+        if (SceneManager.GetActiveScene().name != Constants.GAMESCENE)
+        {
+            DestroyCursor(ip);
+            Destroy(usersGrid.GetChild(index).gameObject);
+        }
     }
 }

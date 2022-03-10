@@ -10,6 +10,7 @@ public class LobbyManager : MonoBehaviour
 
     /// <summary> List of the connected users. </summary>
     [SerializeField] public List<OSCUser> users = new List<OSCUser>();
+    private List<Coroutine> timers = new List<Coroutine>();
 
     /// Events
     public delegate void ConnectionEvent(OSCUser user, int index);
@@ -59,6 +60,7 @@ public class LobbyManager : MonoBehaviour
     private void OnConnect(string ip)
     {
         users.Add(new OSCUser(ip));
+        timers.Add(StartCoroutine(Timeout(users[users.Count - 1])));
         if (OnConnection != null) OnConnection.Invoke(users[users.Count - 1], users.Count - 1);
     }
 
@@ -75,19 +77,30 @@ public class LobbyManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Remove a user from the game.
+    /// </summary>
+    /// <param name="user">The user object.</param>
+    public void RemoveUser(OSCUser user)
+    {
+        if (OnDisconnect != null) OnDisconnect.Invoke(users.IndexOf(user), user.ip);
+        Debug.LogWarning($"{user.ip} Disconnected!");
+        timers.RemoveAt(users.IndexOf(user));
+        users.Remove(user);
+    }
+
+    /// <summary>
     /// Reset the timeout for a user (2 seconds)
     /// </summary>
     public void ResetTimeout(OSCUser user)
     {
-        StopCoroutine(nameof(Timeout));
-        StartCoroutine(nameof(Timeout), user);
+        int index = users.IndexOf(user);
+        StopCoroutine(timers[index]);
+        timers[index] = StartCoroutine(Timeout(user));
     }
 
     private IEnumerator Timeout(OSCUser user)
     {
         yield return new WaitForSeconds(2f);
-        if (OnDisconnect != null) OnDisconnect.Invoke(users.IndexOf(user), user.ip);
-        Debug.LogWarning($"{user.ip} timeout!");
-        users.Remove(user); // Remove the user once they time out.
+        RemoveUser(user);
     }
 }

@@ -17,11 +17,13 @@ public class TurretController : MonoBehaviour
 
     float inputValue = 0;
     bool shooting = false;
-    bool addedUser = false;
+    [HideInInspector] public bool addedUser = false;
     OSCUser user;
 
     private void Update()
     {
+        if (Overlay.isBlocking) return;
+
         if (useKeyboard)
         {
             if (!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.LeftArrow)) inputValue = 0;
