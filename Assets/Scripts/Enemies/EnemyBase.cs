@@ -43,6 +43,10 @@ public class EnemyBase : MonoBehaviour
 
     [HideInInspector] public GameObject spawnObject;
 
+    [Header("Drops")]
+    [Range(0f, 100f)] public float dropChance;
+    public GameObject upgrade;
+
     // Start is called before the first frame update
     void Awake()
     {

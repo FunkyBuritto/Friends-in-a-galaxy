@@ -4,6 +4,7 @@ public class ShipController : MonoBehaviour
 {
     public static ShipController PlayerShip;
     public int Hp { get => hp; set { OnHit?.Invoke(hp, value); hp = value; } }
+    public int MaxHp;
     [SerializeField] private int hp;
 
     private TerrainGenerator tg;
@@ -15,6 +16,7 @@ public class ShipController : MonoBehaviour
     {
         PlayerShip = this;
         tg = FindObjectOfType<TerrainGenerator>();
+        hp = MaxHp;
 
         OnHit += (_, __) => CameraShake.Shake(0.35f, 0.35f);
     }

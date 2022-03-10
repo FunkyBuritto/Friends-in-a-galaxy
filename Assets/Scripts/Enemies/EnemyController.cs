@@ -36,6 +36,12 @@ public class EnemyController : EnemyBase
 
         if (Hp <= 0)
         {
+            if (Random.Range(0f, 100f) < dropChance)
+            {
+                Debug.Log("dropped");
+                Instantiate(upgrade, transform.position, Quaternion.identity);
+            }
+                
             Minimap.UnsubscribeEnemy(transform);
             Destroy(gameObject);
         }

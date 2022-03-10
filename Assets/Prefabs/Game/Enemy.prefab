@@ -4925,6 +4925,8 @@ MonoBehaviour:
   attackDist: 12
   backingDist: 6
   spawnObject: {fileID: 0}
+  dropChance: 10
+  upgrade: {fileID: 8536305991777099668, guid: 0f6ef26ac6675e34ea2305ac86de8fa6, type: 3}
 --- !u!50 &788288237738360862
 Rigidbody2D:
   serializedVersion: 4

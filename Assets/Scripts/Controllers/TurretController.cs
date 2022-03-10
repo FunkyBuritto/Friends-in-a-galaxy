@@ -10,6 +10,7 @@ public class TurretController : MonoBehaviour
     public Transform shootPoint;
     public float attackDelay;
     public float projectileSpeed;
+    public float homingSpeed = 0.2f;
     public GameObject projectile;
 
     float prevTime;
@@ -62,8 +63,11 @@ public class TurretController : MonoBehaviour
             return;
         GameObject proj = Instantiate(projectile);
         Rigidbody2D rigidbd = proj.GetComponent<Rigidbody2D>();
+        PlayerProjectile script = proj.GetComponent<PlayerProjectile>();
         proj.transform.position = shootPoint.position;
         proj.transform.rotation = transform.rotation;
+        script.homingSpeed = homingSpeed;
+        script.lockedOnSpeed = projectileSpeed * 3;
         
         rigidbd.AddForceAtPosition(proj.transform.up.normalized * projectileSpeed, transform.position, ForceMode2D.Impulse);
         prevTime = currTime;

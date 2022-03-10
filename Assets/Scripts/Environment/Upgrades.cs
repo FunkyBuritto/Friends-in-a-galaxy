@@ -9,6 +9,7 @@ public class Upgrades : MonoBehaviour
     TurretController turret;
     BoosterController booster;
 
+    public List<Sprite> sprites = new List<Sprite>();
     public enum UpgradeType
     {
         Shield,
@@ -19,37 +20,48 @@ public class Upgrades : MonoBehaviour
         MaxHp,
         RegenerateHp,
     }
+    public UpgradeType upgrade;
 
-    UpgradeType upgrade;
-
-    // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         ship = player.GetComponent<ShipController>();
         turret = player.GetComponentInChildren<TurretController>();
         booster = player.GetComponentInChildren<BoosterController>();
         upgrade = (UpgradeType)Mathf.FloorToInt(Random.Range(0, 7));
+        GetComponent<SpriteRenderer>().sprite = sprites[((int)upgrade)];
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!collision.gameObject.CompareTag("Player"))
+            return;
+
         switch (upgrade)
         {
             case UpgradeType.Shield:
+                booster.shield.transform.localScale += new Vector3(0.2f, 0.2f);
                 break;
             case UpgradeType.AttackSpeed:
+                turret.attackDelay = Mathf.Clamp(turret.attackDelay - 0.05f, 0.05f, 1);
                 break;
             case UpgradeType.ProjectileSpeed:
+                turret.projectileSpeed++;
                 break;
             case UpgradeType.HomingStrength:
+                turret.homingSpeed += 0.1f;
                 break;
             case UpgradeType.BoosterStrength:
+                booster.boostSpeed++;
                 break;
             case UpgradeType.MaxHp:
+                ship.MaxHp += 25;
                 break;
             case UpgradeType.RegenerateHp:
+                ship.Hp = Mathf.Clamp(ship.Hp + 50, -1, ship.MaxHp);
                 break;
         }
+
+        Destroy(gameObject);
     }
 }

@@ -30,7 +30,7 @@ public class Portal : MonoBehaviour
         // Generate Points
         float angle = 360 / blockPointAmount;
         for (int i = 0; i < (360 * blockLayers); i += (int)angle) {
-            linePoints.Add(new Vector3(Mathf.Sin(i * Mathf.PI / 180) + transform.position.x, Mathf.Cos(i * Mathf.PI / 180) + transform.position.y, 0) * blockRadius);
+            linePoints.Add(new Vector3(Mathf.Sin(i * Mathf.PI / 180), Mathf.Cos(i * Mathf.PI / 180), 0) * blockRadius + transform.position);
         }
 
         lr.positionCount = blockPointAmount * blockLayers;

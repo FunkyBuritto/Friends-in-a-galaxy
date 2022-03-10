@@ -44,6 +44,11 @@ public class EliteEnemyController : EnemyBase
             Hp--;
 
         if (Hp <= 0) {
+            if (Random.Range(0f, 100f) < dropChance)
+            {
+                Instantiate(upgrade, transform.position, Quaternion.identity);
+            }
+                
             Minimap.UnsubscribeEnemy(transform);
             Portal.portal.eliteCount--;
             Destroy(gameObject);
