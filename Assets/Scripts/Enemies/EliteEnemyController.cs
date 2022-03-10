@@ -6,6 +6,8 @@ public class EliteEnemyController : EnemyBase
 {
     public override void Relocating()
     {
+        if(player == null) player = GameObject.FindGameObjectWithTag("Player");
+        if(rb == null) rb = GetComponent<Rigidbody2D>();
         base.Relocating();
     }
 
