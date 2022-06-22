@@ -12,6 +12,12 @@
 <br>
 
 <div align="center">
+    <a href="https://github.com/FunkyBuritto/Friends-in-a-galaxy/releases/tag/v0.1.0">Download Build Here!</a>
+</div>
+
+<br>
+
+<div align="center">
     <a href="#Concept">Concept</a>
     ·
     <a href="#Limitations">Limitations</a>
